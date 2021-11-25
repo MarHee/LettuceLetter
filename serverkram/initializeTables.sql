@@ -1,7 +1,7 @@
 /*
 initialisiert komplette Datenbank,
 wird geladen mit
-sqlite> .read initializeTables.sql
+sqlite> .read serverkram/initializeTables.sql
 */
 
 /*
@@ -43,6 +43,6 @@ INSERT INTO users (name, password, player) VALUES ("David", "divaD", 1);
 INSERT INTO users (name, password, player) VALUES ("Maria17", "123qwerty", 1);
 INSERT INTO users (name, password, player) VALUES ("SpeckiSpectator", "lurking1sFun", 0);
 
-INSERT INTO games (roundsPlayed, active, player1, player2, player3, player4) VALUES (2, 1, 2, 5);
+INSERT INTO games (roundsPlayed, active, player1, player2) VALUES (2, 1, 2, 5);
 INSERT INTO games (roundsPlayed, active, player1, player2, player3, player4) VALUES (6, 1, 2, 5, 4, 3);
 INSERT INTO games (roundsPlayed, active, player1, player2, player3, player4) VALUES (7, 0, 1, 3, 2, 5);
