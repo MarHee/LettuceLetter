@@ -9,7 +9,7 @@ Usertabelle mit allen Werten für Registrierung und einem BehilfsBool für Playe
 */
 
 CREATE TABLE users (
-    userID INTEGER PRIMARY KEY AUTO_INCREMENT,
+    userID INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     password TEXT NOT NULL,
     player INTEGER(1) /*SQLite hat kein Boolean*/
@@ -21,7 +21,7 @@ und einer Verlinkung für 4 Spieler, denke das sollte reichen
 */
 
 CREATE TABLE games (
-    gameID INTEGER PRIMARY KEY AUTO_INCREMENT,   
+    gameID INTEGER PRIMARY KEY AUTOINCREMENT,   
     roundsPlayed INTEGER NOT NULL, 
     active INTEGER(1),   
     player1 INTEGER,   
@@ -43,7 +43,7 @@ Chattabelle mit gesendeten Nachrichten, soll auf Startseite für User angezeigt 
 */
 
 CREATE TABLE chat (
-    msgID INTEGER PRIMARY KEY AUTO_INCREMENT,
+    msgID INTEGER PRIMARY KEY AUTOINCREMENT,
     sentBy INTEGER NOT NULL,
     msgText TEXT NOT NULL
 );
