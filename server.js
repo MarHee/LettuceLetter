@@ -80,10 +80,11 @@ app.post('/userRegister', function(req, res){
 });
 
 //Schließen der Datenbank
-db.close((err) => {
+/*db.close((err) => {
     if (err) {
     console.error(err.message);
     }
     console.log('Close the database connection.');
     });
-    
+    */
+   
