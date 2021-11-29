@@ -1,9 +1,0 @@
-# Kommentare
-# Ordner + Inhalt mit / am Ende
-node_modules/
-
-# Dateien einfach mit Dateinamen
-backendPlanung
-
-# Dateien nach Muster mit *
-package*
