@@ -30,13 +30,13 @@ app.listen(3000, function(){
 app.use(express.static(__dirname + '/views'));    
 
 app.get('/login', function(req, res){
-    res.sendFile(__dirname + '/login.html');
+    res.sendFile(__dirname + '/views/login.html');
 });
 app.get('/start', function(req, res){
-    res.sendFile(__dirname + '/start.html');
+    res.sendFile(__dirname + '/views/start.html');
 });
 app.get('/register', function(req, res){
-    res.sendFile(__dirname + '/register.html');
+    res.sendFile(__dirname + '/views/register.html');
 });
 
 //Loginfunktion
