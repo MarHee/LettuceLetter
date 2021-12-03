@@ -21,10 +21,52 @@ app.set("view engine", "ejs");
 app.engine('.ejs', require('ejs').__express);
 app.set('view engine', 'ejs');
 
+// Initialisierung express-fileupload
+const fileUpload = require('express-fileupload');
+app.use(fileUpload());
+
+// Ordner "images" öffentlich machen, hier werden hochgeladene Bilder abgelegt
+app.use(express.static(__dirname + '/images'));
+
+// Ordner "scripts" öffentlich machen; von hier aus werden Skripte mit JS im Browser geladen
+app.use(express.static(__dirname + '/scripts'));
+
 // Server starten
 app.listen(3000, function(){
     console.log('listening on port 3000');
+});
+
+const fs = require('fs')
+
+// Hier kann man zeichnen und Bilder hochladen in images
+app.get("/upload", function(req, res){
+    res.sendFile(__dirname + "/views/upload_formular.html");
+});
+
+let testFilename = "Dateiname Bild";
+
+
+// Auswertung des Upload-Formulars
+app.post('/onupload', function(req, res) {
+    // siehe http://zhangwenli.com/blog/2015/12/27/upload-canvas-snapshot-to-nodejs/ von Plaß
+
+    const dataURL = req.body.img;
+    var matches = dataURL.match(/^data:.+\/(.+);base64,(.*)$/);
+    var buffer = new Buffer.from(matches[2], 'base64');
+  
+    // speichert die Datei im Ordner images (der muss natürlich existieren)
+    testFilename = "Testbild" + Date.now() + ".png";
+    // console.log(testFilename);
+    fs.writeFile(__dirname + "/images/" + testFilename, buffer, function (err) {
+      console.log("done");
     });
+  });
+  
+  // Zeigt das Bild an 
+app.get('/bildzeigen', function(req, res){
+    // console.log(testFilename);
+    res.render("bildzeigen", {"filename": testFilename});
+  });
     
     
 app.use(express.static(__dirname + '/views'));    
