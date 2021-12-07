@@ -45,8 +45,14 @@ Chattabelle mit gesendeten Nachrichten, soll auf Startseite für User angezeigt 
 CREATE TABLE chat (
     msgID INTEGER PRIMARY KEY AUTOINCREMENT,
     sentBy INTEGER NOT NULL,
-    msgText TEXT NOT NULL
+    msgText TEXT NOT NULL,
+    msgTime TEXT,
+    FOREIGN KEY(sentBy) REFERENCES users(userID)
 );
+
+/*
+    Gametabelle Rundenspalten einfügen
+*/
 
 /*Testwerte einfügen*/
 

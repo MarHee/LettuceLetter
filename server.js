@@ -45,6 +45,11 @@ app.get("/upload", function(req, res){
 
 let testFilename = "Dateiname Bild";
 
+/* TODO:
+    GameSessionID & Runde in Bild Dateinamen
+    Verknüpfung mit Gametable
+    Bild aus Datenbank abrufen & anzeigen
+*/
 
 // Auswertung des Upload-Formulars
 app.post('/onupload', function(req, res) {
