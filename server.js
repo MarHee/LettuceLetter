@@ -31,6 +31,9 @@ app.use(express.static(__dirname + '/images'));
 // Ordner "scripts" öffentlich machen; von hier aus werden Skripte mit JS im Browser geladen
 app.use(express.static(__dirname + '/scripts'));
 
+// Ordner "css" öffentlich machen, hier wird alles, was mit css zu tun hat abgelegt
+app.use(express.static(__dirname + "/css"));
+
 // Server starten
 app.listen(3000, function(){
     console.log('listening on port 3000');
@@ -84,6 +87,10 @@ app.get('/start', function(req, res){
 });
 app.get('/register', function(req, res){
     res.sendFile(__dirname + '/views/register.html');
+});
+
+app.get("/chat", function(req, res){
+    res.sendFile(__dirname + "/views/chat.html");
 });
 
 //Loginfunktion
