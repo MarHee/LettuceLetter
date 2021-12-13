@@ -47,3 +47,7 @@ button.primaryContained {
 button.primaryContained:hover {
 	background: #0120a8;
 }
+
+.message-time{
+	font-size:10px;
+}
