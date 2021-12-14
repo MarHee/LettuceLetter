@@ -22,20 +22,19 @@ und einer Verlinkung für 4 Spieler, denke das sollte reichen
 
 CREATE TABLE games (
     gameID INTEGER PRIMARY KEY AUTOINCREMENT,   
-    roundsPlayed INTEGER NOT NULL, 
+    roundsPlayed INTEGER(1) NOT NULL, 
     active INTEGER(1),   
-    player1 INTEGER,   
-    player2 INTEGER,   
-    player3 INTEGER,   
-    player4 INTEGER,   
-    FOREIGN KEY(player1) REFERENCES users(userID), 
-    FOREIGN KEY(player2) REFERENCES users(userID),   
-    FOREIGN KEY(player3) REFERENCES users(userID), 
-    FOREIGN KEY(player4) REFERENCES users(userID)    
+    round1 TEXT,
+    round2 TEXT,
+    round3 TEXT,
+    round4 TEXT,
+    round5 TEXT,
+    round6 TEXT,
+    round7 TEXT
     );
 
     /*
-    TODO: Bilder & Texte hier speichern? wenn nicht wo/wie sonst?
+    TODO: Runden mit geraden Zahlen Bilder --> Link in images Ordner = normaler Text?
     */
 
 /*
@@ -50,10 +49,6 @@ CREATE TABLE chat (
     FOREIGN KEY(sentBy) REFERENCES users(userID)
 );
 
-/*
-    Gametabelle Rundenspalten einfügen
-*/
-
 /*Testwerte einfügen*/
 
 INSERT INTO users (name, password, player) VALUES ("Alice", "§$Y45/912v", 1);
@@ -63,9 +58,9 @@ INSERT INTO users (name, password, player) VALUES ("David", "divaD", 1);
 INSERT INTO users (name, password, player) VALUES ("Maria17", "123qwerty", 1);
 INSERT INTO users (name, password, player) VALUES ("SpeckiSpectator", "lurking1sFun", 0);
 
-INSERT INTO games (roundsPlayed, active, player1, player2) VALUES (2, 1, 2, 5);
-INSERT INTO games (roundsPlayed, active, player1, player2, player3, player4) VALUES (6, 1, 2, 5, 4, 3);
-INSERT INTO games (roundsPlayed, active, player1, player2, player3, player4) VALUES (7, 0, 1, 3, 2, 5);
+INSERT INTO games (roundsPlayed, active) VALUES (0, 1);
+INSERT INTO games (roundsPlayed, active, round1, round2) VALUES (2, 1, "Schwein", "images/gameIDrunde2");
+INSERT INTO games (roundsPlayed, active, round1, round2, round3, round4, round5, round6, round7) VALUES (7, 0, "Haus", "images/gameIDrunde2", "Haus", "images/gameIDrunde4", "Haus", "images/gameIDrunde6", "Hund");
 
 INSERT INTO chat (sentBy, msgText) VALUES (3, "Hi guys!");
 INSERT INTO chat (sentBy, msgText) VALUES (1, "Hallo zusammen");

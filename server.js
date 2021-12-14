@@ -63,7 +63,7 @@ app.post('/onupload', function(req, res) {
     var buffer = new Buffer.from(matches[2], 'base64');
   
     // speichert die Datei im Ordner images (der muss natürlich existieren)
-    testFilename = "Testbild" + Date.now() + ".png";
+    testFilename = "Testbild" + Date.now() + ".png"; //TODO: Dateinamen in GameID+Runde ändern
     // console.log(testFilename);
     fs.writeFile(__dirname + "/images/" + testFilename, buffer, function (err) {
       console.log("done");
@@ -88,7 +88,14 @@ app.get('/start', function(req, res){
 app.get('/register', function(req, res){
     res.sendFile(__dirname + '/views/register.html');
 });
-
+app.get('/activegames', function(req, res){
+    res.sendFile(__dirname + '/views/activegames.ejs');
+});
+/*
+app.get('/game', function(req, res){
+    res.sendFile(__dirname + '/views/game.html');
+});
+*/
 
 //Play-Button von Start
 app.post("/play", function(req,res){    
