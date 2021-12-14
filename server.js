@@ -42,9 +42,9 @@ app.listen(3000, function(){
 const fs = require('fs')
 
 // Hier kann man zeichnen und Bilder hochladen in images
-app.get("/upload", function(req, res){
-    res.sendFile(__dirname + "/views/upload_formular.html");
-});
+// app.get("/upload", function(req, res){
+ //   res.sendFile(__dirname + "/views/upload_formular.html");
+// });
 
 let testFilename = "Dateiname Bild";
 
@@ -89,8 +89,20 @@ app.get('/register', function(req, res){
     res.sendFile(__dirname + '/views/register.html');
 });
 
-app.get("/chat", function(req, res){
+
+//Play-Button von Start
+app.post("/play", function(req,res){    
+    res.redirect("/login");
+});
+
+//Spielen-Button von Login
+app.post("/playAngemeldet", function(req,res){    
+    res.sendFile(__dirname + "/views/upload_formular.html");
+});
+
+ app.get("/chat", function(req, res){
     res.sendFile(__dirname + "/views/chat.html");
+
 });
 
 //Loginfunktion
@@ -102,7 +114,7 @@ app.post("/userLogin", function(req, res){
     db.all(
         `SELECT * FROM users WHERE name="${param_username}" AND password="${param_password}"`, (err, rows) => {
             if (rows.length != 0){
-                res.send(`Willkommen zurück, ${param_username}`);
+                res.render("loginErfolgreich", {"benutzername": param_username});
             } else if (err) {
                 res.send(err.message);
             } else {
@@ -132,6 +144,7 @@ app.post('/userRegister', function(req, res){
         });   
     } 
 });
+
 
 //Schließen der Datenbank
 /*db.close((err) => {
