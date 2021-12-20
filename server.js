@@ -107,6 +107,8 @@ app.post("/playAngemeldet", function(req,res){
     res.sendFile(__dirname + "/views/gameFirst.html");
 });
 
+// Hier wird die Eingabe aus dem Server in die db gespeichert 
+// Geht noch nicht Fehlermeldung "round1 existiert nicht in games" -> .read initalizeTables.sql geht auch nicht 
 
 app.post("/Runde1", function(req,res){    
     const Zeichnen= req.body.wasZeichnen;
@@ -128,6 +130,11 @@ app.post("/Runde1", function(req,res){
     res.sendFile(__dirname + "/views/chat.html");
 
 });
+
+//Zeichenfunktion
+app.get("/spielen",function(req,res){
+    res.sendFile(__dirname + "/views/upload_formular.html");
+})
 
 //Loginfunktion
 app.post("/userLogin", function(req, res){
