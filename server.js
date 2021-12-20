@@ -104,8 +104,25 @@ app.post("/play", function(req,res){
 
 //Spielen-Button von Login
 app.post("/playAngemeldet", function(req,res){    
-    res.sendFile(__dirname + "/views/upload_formular.html");
+    res.sendFile(__dirname + "/views/gameFirst.html");
 });
+
+
+app.post("/Runde1", function(req,res){    
+    const Zeichnen= req.body.wasZeichnen;
+
+    console.log(Zeichnen);
+
+    db.run( `INSERT INTO games (roundsPlayed, round1) VALUES ('1', '${ Zeichnen } ')`, function(err){
+        if (err){
+            res.send(err.message)
+        } else {
+            res.sendFile(__dirname + "/views/upload_formular.html");
+        }
+    });   
+});
+
+
 
  app.get("/chat", function(req, res){
     res.sendFile(__dirname + "/views/chat.html");
