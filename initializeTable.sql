@@ -34,7 +34,7 @@ CREATE TABLE games (
     );
 
     /*
-    TODO: Runden mit geraden Zahlen Bilder --> Link in images Ordner = normaler Text?
+    TODO: Runden mit geraden Zahlen Bilder
     */
 
 /*
