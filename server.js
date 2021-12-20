@@ -105,7 +105,6 @@ app.post("/play", function(req,res){
 });
 
 //Spielen-Button von Login
-<<<<<<< Updated upstream
 app.post("/playAngemeldet", function(req,res){    
     res.sendFile(__dirname + "/views/gameFirst.html");
 });
@@ -124,46 +123,9 @@ app.post("/Runde1", function(req,res){
         } else {
             res.sendFile(__dirname + "/views/upload_formular.html");
         }
-    });   
-=======
+    });
+});   
 //redirect auf activegames?
-// Testwert gameID = 1
-app.post("/playAngemeldet", function(req,res){
-    //GameID sammeln 
-    var testID = 1; 
-    
-    //Runde sammeln
-    var round = db.all(`SELECT roundsplayed FROM games WHERE GameID = ${testID}` // Testen ob Spiel noch aktiv, sonst zu Galerie
-    );
-    
-    //Rundenanzahl zur Spaltensuche
-    db.all(`SELECT round"${round}" FROM games WHERE GameID = ${testID}`, (err, ) => { // variable rounds kein Parameter für sqlite in ejs, etwas wie rows etc finden
-        //senden zu Text/Bild eingabe mit Anzeige von letzter Runde
-        if (round % 2 == 0) { //gerade Rundenanzahl ==> Bild
-           res.sendFile(__dirname + "/views/upload_formular_canvas.html"); 
-
-        } else { //ungerade Rundenanzahl ==> Text
-
-        }
-
-
-    })
-    
-    
-    //speichern in nächste Runde Spalte
-
-    
-});
-
-app.post("/postText", functiom (req, res){
-    const textInput = req.body.textInput;
-    //GameID und Runde abfragen
-    db.all(`ALTER TABLE games INSERT ` //text in entsprechende Spalte)
-
->>>>>>> Stashed changes
-});
-
-
 
  app.get("/chat", function(req, res){
     res.sendFile(__dirname + "/views/chat.html");
@@ -224,4 +186,3 @@ app.post('/userRegister', function(req, res){
     console.log('Close the database connection.');
     });
     */
-   

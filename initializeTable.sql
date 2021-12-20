@@ -17,7 +17,7 @@ CREATE TABLE users (
 
 /*
 Gamestabelle mit den gespielten Runden, einem Booleanersatz ob es aktiv ist oder nicht (da muss dann noch die Methode dran wenn die Rundenzahl 7 erreicht ist)
-und einer Verlinkung für 4 Spieler, denke das sollte reichen
+und den Spalten für die Daten des Games, Text oder Bild
 */
 
 CREATE TABLE games (
