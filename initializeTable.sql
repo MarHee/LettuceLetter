@@ -1,7 +1,7 @@
 /*
 initialisiert komplette Datenbank,
 wird geladen mit
-sqlite> .read quitinitializeTables.sql
+sqlite> .read quitinitializeTable.sql
 */
 
 /*
