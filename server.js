@@ -55,6 +55,8 @@ let testFilename = "Dateiname Bild";
     Bild aus Datenbank abrufen & anzeigen
 */
 
+let activeGameID = "Game" + 2;
+
 // Auswertung des Upload-Formulars
 app.post('/onupload', function(req, res) {
     // siehe http://zhangwenli.com/blog/2015/12/27/upload-canvas-snapshot-to-nodejs/ von Plaß
@@ -64,7 +66,7 @@ app.post('/onupload', function(req, res) {
     var buffer = new Buffer.from(matches[2], 'base64');
   
     // speichert die Datei im Ordner images (der muss natürlich existieren)
-    testFilename = "Testbild" + Date.now() + ".png"; //TODO: Dateinamen in GameID+Runde ändern
+    testFilename = activeGameID + Date.now() + scripts/getRound.js + ".png"; //TODO: Dateinamen in GameID+Runde ändern
     // console.log(testFilename);
     fs.writeFile(__dirname + "/images/" + testFilename, buffer, function (err) {
       console.log("done");

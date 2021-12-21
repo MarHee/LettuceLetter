@@ -1,3 +1,5 @@
+//res.sendFile(__dirname + "/views/upload_formular_canvas.html")
+
 //Verbindung zur Datenbank
 const sqlite3 = require('sqlite3').verbose();
 let db = new sqlite3.Database('lettuce.db', (err) => {
@@ -34,17 +36,25 @@ app.use(express.static(__dirname + '/scripts'));
 // Ordner "css" öffentlich machen, hier wird alles, was mit css zu tun hat abgelegt
 app.use(express.static(__dirname + "/css"));
 
-let sql = `SELECT roundsPlayed
+
+
+let gameID = 3;
+let varRound = 2;
+let varRoundComplete = "round" + varRound;
+
+console.log(`suche nach ${varRoundComplete}`);
+console.log(scripts/getRound.varRounds);
+
+let sql = `SELECT ${varRoundComplete}
            FROM games
            WHERE gameID  = ?`;
-let gameID = 3;
 
 // sollte die gespielten Runden ausgeben
 db.get(sql, [gameID], (err, row) => {
   if (err) {
     return console.error(err.message);
   } return row 
-    ? console.log(row.gameID, row.roundsPlayed, row.round1)
+    ? console.log(row)
     : console.log(`No Game found with the ID ${gameID}`);
 
 });
