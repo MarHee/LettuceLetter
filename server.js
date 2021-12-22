@@ -66,7 +66,7 @@ app.post('/onupload', function(req, res) {
     var buffer = new Buffer.from(matches[2], 'base64');
   
     // speichert die Datei im Ordner images (der muss natürlich existieren)
-    testFilename = activeGameID + Date.now() + scripts/getRound.js + ".png"; //TODO: Dateinamen in GameID+Runde ändern
+    testFilename = activeGameID + Date.now() + ".png"; //TODO: Dateinamen in GameID+Runde ändern
     // console.log(testFilename);
     fs.writeFile(__dirname + "/images/" + testFilename, buffer, function (err) {
       console.log("done");
