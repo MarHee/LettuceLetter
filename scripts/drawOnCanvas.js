@@ -10,7 +10,7 @@ function setAttributes(element, attributes) {
         console.log(key, attributes[key])
     }
 }
-setAttributes(canvas, {id: "canvas", width: "500px", height: "350px;", style: "border:solid;"})
+setAttributes(canvas, {id: "canvas", width: "800px", height: "800px;", style: "border:solid;"})
 
 
 // get canvas 2D context and set him correct size
