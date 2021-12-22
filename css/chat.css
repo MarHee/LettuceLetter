@@ -1,9 +1,11 @@
 .container {
-	max-width: 640px;
+	max-width: 440px;
 	margin: 30px auto;
-	background: rgb(18, 187, 103);
+	background: #94cf03;
 	border-radius: 8px;
 	padding: 20px;
+	float: right;
+
 }
 
 .comment {
@@ -30,7 +32,7 @@
 }
 
 button.primaryContained {
-	background: #016ba8;
+	background: #3f5707;
 	color: #fff;
 	padding: 10px 10px;
 	border: none;
@@ -45,9 +47,5 @@ button.primaryContained {
 }
 
 button.primaryContained:hover {
-	background: #0120a8;
-}
-
-.message-time{
-	font-size:10px;
+	background: #202e01;
 }
