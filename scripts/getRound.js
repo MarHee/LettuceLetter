@@ -1,3 +1,4 @@
+/*
 //Verbindung zur Datenbank
 const sqlite3 = require('sqlite3').verbose();
 let db = new sqlite3.Database('lettuce.db', (err) => {
@@ -33,29 +34,36 @@ app.use(express.static(__dirname + '/scripts'));
 
 // Ordner "css" öffentlich machen, hier wird alles, was mit css zu tun hat abgelegt
 app.use(express.static(__dirname + "/css"));
+*/
 
-let sql = `SELECT roundsPlayed
-           FROM games
-           WHERE gameID  = ?`;
 let gameID = 3;
 
-// sollte die gespielten Runden ausgeben
-db.get(sql, [gameID], (err, row) => {
-  if (err) {
-    return console.error(err.message);
-  } 
-  let varRounds = row.roundsPlayed
-  console.log("Test" + varRounds);
-  return varRounds
-  /*
-    ? console.log(row.roundsPlayed)
-    : console.log(`No Game found with the ID ${gameID}`);
-*/
-});
+function getRound(gameID){
+ let sql = `SELECT roundsPlayed
+            FROM games
+            WHERE gameID  = 3`;
+  
 
-db.close((err) => {
+  // sollte die gespielten Runden ausgeben
+  db.get(sql, [gameID], (err, row) => {
+    if (err) {
+      return console.error(err.message);
+    } 
+    let varRounds = row.roundsPlayed
+    //console.log("Test" + varRounds);
+    return varRounds
+    /*
+      ? console.log(row.roundsPlayed)
+      : console.log(`No Game found with the ID ${gameID}`);
+  */
+  });
+};
+
+//console.log(getRound);
+
+/*db.close((err) => {
     if (err) {
     console.error(err.message);
     }
     console.log('Close the database connection.');
-    });
+    });*/

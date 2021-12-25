@@ -91,9 +91,9 @@ app.get('/start', function(req, res){
 app.get('/register', function(req, res){
     res.sendFile(__dirname + '/views/register.html');
 });
-//app.get('/activegames', function(req, res){
-//    res.sendFile(__dirname + '/views/activegames.html');
-//});
+app.get('/test', function(req, res){
+    res.sendFile(__dirname + '/views/test.html');
+});
 /*
 app.get('/game', function(req, res){
     res.sendFile(__dirname + '/views/game.html');
@@ -106,6 +106,20 @@ app.post("/play", function(req,res){
     res.redirect("/login");
 });
 
+app.post("/showRound", function(req,res){
+    const param_gameID = req.body.input_gameID;
+    db.all(`SELECT roundsPlayed FROM games WHERE gameID  = 3`, [param_gameID], (err, row) => {
+        if (err) {
+          res.send(err.message);
+        } else {
+            const varRounds = row.roundsPlayed
+            //console.log("Test" + varRounds);
+            res.send("test " + varRounds);
+        }
+        res.send("this happened");
+       
+});
+ 
 //Spielen-Button von Login
 app.post("/playAngemeldet", function(req,res){    
     res.sendFile(__dirname + "/views/gameFirst.html");
@@ -189,6 +203,5 @@ app.post('/userRegister', function(req, res){
     if (err) {
     console.error(err.message);
     }
-    console.log('Close the database connection.');
-    });
-    */
+    console.log('Close the database connection.');*/
+})
