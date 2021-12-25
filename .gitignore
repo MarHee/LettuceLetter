@@ -4,6 +4,7 @@ node_modules/
 
 # Dateien einfach mit Dateinamen
 backendPlanung
+todo
 
 # Dateien nach Muster mit *
 package*

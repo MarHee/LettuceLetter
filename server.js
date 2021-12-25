@@ -91,9 +91,9 @@ app.get('/start', function(req, res){
 app.get('/register', function(req, res){
     res.sendFile(__dirname + '/views/register.html');
 });
-app.get('/activegames', function(req, res){
-    res.sendFile(__dirname + '/views/activegames.ejs');
-});
+//app.get('/activegames', function(req, res){
+//    res.sendFile(__dirname + '/views/activegames.html');
+//});
 /*
 app.get('/game', function(req, res){
     res.sendFile(__dirname + '/views/game.html');
@@ -101,7 +101,7 @@ app.get('/game', function(req, res){
 */
 
 //Play-Button von Start
-// Testen ob User angemeldet ist?
+// Testen ob User angemeldet ist?  --> Session gedöns
 app.post("/play", function(req,res){    
     res.redirect("/login");
 });
@@ -112,7 +112,6 @@ app.post("/playAngemeldet", function(req,res){
 });
 
 // Hier wird die Eingabe aus dem Server in die db gespeichert 
-// Geht noch nicht Fehlermeldung "round1 existiert nicht in games" -> .read initalizeTables.sql geht auch nicht 
 
 app.post("/Runde1", function(req,res){    
     const Zeichnen= req.body.wasZeichnen;
@@ -127,7 +126,7 @@ app.post("/Runde1", function(req,res){
         }
     });
 });   
-//redirect auf activegames?
+//Funkltion noch sehr hardcoded, Versuch, dass flexibler zu machen
 
  app.get("/chat", function(req, res){
     res.sendFile(__dirname + "/views/chat.html");
@@ -138,6 +137,11 @@ app.post("/Runde1", function(req,res){
 app.get("/spielen",function(req,res){
     res.sendFile(__dirname + "/views/upload_formular.html");
 })
+
+/*app.get("/activegames", function(req, res){
+    res.render("activegames")
+});
+*/
 
 //Loginfunktion
 app.post("/userLogin", function(req, res){
