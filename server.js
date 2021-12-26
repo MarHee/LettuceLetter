@@ -106,17 +106,30 @@ app.post("/play", function(req,res){
     res.redirect("/login");
 });
 
+//Anzeige der aktiven Runde und Inhalt aktiver Runde
+
 app.post("/showRound", function(req,res){
     const param_gameID = req.body.input_gameID;
-    db.all(`SELECT roundsPlayed FROM games WHERE gameID  = 3`, [param_gameID], (err, row) => {
+    db.each(`SELECT roundsPlayed, round3 FROM games WHERE gameID  = ${param_gameID}`, (err, row) => {
+        //res.send("searching " + param_gameID);
         if (err) {
           res.send(err.message);
         } else {
-            const varRounds = row.roundsPlayed
-            //console.log("Test" + varRounds);
-            res.send("test " + varRounds);
+            const varRounds = "round" + row.roundsPlayed;
+            console.log("Test" + varRounds);
+            res.send("test " + varRounds + " = " + row.round3); //TODO variablen Spaltennamen 
+            /*db.each(`SELECT ${varRounds} FROM games WHERE gameID  = ${param_gameID}`, (err, row) => {
+                if (err) {
+                    res.send(err.message);
+                } else {
+                    const varGame = row.${varRounds};
+                    console.log(varGame);
+                    res.send('Testtest' + varGame);
+                } //Lösund activeRound Column?
+
+            })*/
         }
-        res.send("this happened");
+        //res.send("this happened");
        
 });
  
