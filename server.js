@@ -136,16 +136,19 @@ app.post("/playAngemeldet", function(req,res){
 
 // Hier wird die Eingabe aus dem Server in die db gespeichert 
 
-app.post("/Runde1", function(req,res){    
+app.post("/RundeUngerade", function(req,res){    
     const Zeichnen= req.body.wasZeichnen;
 
     console.log(Zeichnen);
+    const oldRound = 4;
+    const newRound = 4 + 1; //call /showRound Variable
+    console.log(newRound);
 
-    db.run( `INSERT INTO games (roundsPlayed, round1) VALUES ('1', '${ Zeichnen } ')`, function(err){
+    db.run( `INSERT INTO games (roundsPlayed, round${oldRound}, activeRound) VALUES (${newRound}, '${ Zeichnen } ', '${Zeichnen}')`, function(err){
         if (err){
             res.send(err.message)
         } else {
-            res.sendFile(__dirname + "/views/upload_formular.html");
+            res.sendFile(__dirname + "/views/upload_formular.html"); //sollte Runde speichern, nicht direkt weiterspielen lassen
         }
     });
 });   
