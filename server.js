@@ -110,27 +110,23 @@ app.post("/play", function(req,res){
 
 app.post("/showRound", function(req,res){
     const param_gameID = req.body.input_gameID;
-    db.each(`SELECT roundsPlayed, round3 FROM games WHERE gameID  = ${param_gameID}`, (err, row) => {
-        //res.send("searching " + param_gameID);
+    db.each(`SELECT roundsPlayed FROM games WHERE gameID  = ${param_gameID}`, (err, row) => {
         if (err) {
           res.send(err.message);
         } else {
-            const varRounds = "round" + row.roundsPlayed;
+            const varRounds = row.roundsPlayed;
             console.log("Test" + varRounds);
-            res.send("test " + varRounds + " = " + row.round3); //TODO variablen Spaltennamen 
-            /*db.each(`SELECT ${varRounds} FROM games WHERE gameID  = ${param_gameID}`, (err, row) => {
+            db.each(`SELECT activeRound FROM games WHERE gameID  = ${param_gameID}`, (err, row) => {
                 if (err) {
                     res.send(err.message);
                 } else {
-                    const varGame = row.${varRounds};
+                    const varGame = row.activeRound;
                     console.log(varGame);
-                    res.send('Testtest' + varGame);
-                } //Lösund activeRound Column?
-
-            })*/
-        }
-        //res.send("this happened");
-       
+                    res.send(varRounds + " = " + row.activeRound);
+                }
+            });
+        } 
+    });
 });
  
 //Spielen-Button von Login
@@ -209,12 +205,3 @@ app.post('/userRegister', function(req, res){
         });   
     } 
 });
-
-
-//Schließen der Datenbank
-/*db.close((err) => {
-    if (err) {
-    console.error(err.message);
-    }
-    console.log('Close the database connection.');*/
-})

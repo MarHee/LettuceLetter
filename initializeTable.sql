@@ -1,7 +1,7 @@
 /*
 initialisiert komplette Datenbank,
 wird geladen mit
-sqlite> .read quitinitializeTable.sql
+sqlite> .read initializeTable.sql
 */
 
 /*
@@ -30,7 +30,8 @@ CREATE TABLE games (
     round4 TEXT,
     round5 TEXT,
     round6 TEXT,
-    round7 TEXT
+    round7 TEXT,
+    activeRound TEXT
     );
 
     /*
