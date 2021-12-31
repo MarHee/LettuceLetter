@@ -15,8 +15,12 @@
 
         <p> Wenn du Spielen möchtest: <br>
             <form action="/playAngemeldet" method="POST">
-                <button type="submit" class='primaryContained float-right'>Spielen</button>
+                <button type="submit" class='primaryContained float-right'>Spielen Neu</button>
             </form> 
+            <form action="/showRound" method="POST">
+                <input type="number" name="input_gameID">
+                <button type="submit">Laufende Runde</button>
+            </form>
 
         </p>
 
