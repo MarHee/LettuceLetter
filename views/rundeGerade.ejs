@@ -7,8 +7,18 @@
     <body>
         <h2>Mal das</h2>
         <p>
-            <%= Text %>
-            <button>hochladen</button>
+            Game <%=Game%>
+            Runde <%=Runde%>
+            <%=Text %>
+            <!--Canvas magic pls-->
+
+            <form action="/Gerade">
+                <input type="text" name="text"> <!-- Platzhalter bis Bildhochladen drin ist-->
+                Game <input type="number" name="gameID"> <!--manuelle Eingabe weil Übergabe der Variablen irgendwie nicht klappt-->
+                Runde <input type="number" name="round">
+
+                <button class='primaryContained float-right'>hochladen</button>
+            </form>
         </p>
 
 

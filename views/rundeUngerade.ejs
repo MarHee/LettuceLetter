@@ -7,8 +7,17 @@
     <body>
         <h2>was siehst du?</h2>
         <p>
+            Game <%= Game%>
+            Runde <%= Runde%>
             <img src="<%=filename%>" alt="Bild">
-            <form></form><button>hochladen</button>
+
+            <form action="/Ungerade">
+                <input type="text" name="text">
+                Game <input type="number" name="gameID"> <!--manuelle Eingabe weil Übergabe der Variablen irgendwie nicht klappt-->
+                Runde <input type="number" name="round">
+                
+                <button class='primaryContained float-right'>hochladen</button>
+            </form>
         </p>
 
 

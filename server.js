@@ -55,7 +55,7 @@ let testFilename = "Dateiname Bild";
     Bild aus Datenbank abrufen & anzeigen
 */
 
-let activeGameID = "Game" + 2;
+let activeGameID = "Game" + 2; //???
 
 // Auswertung des Upload-Formulars
 app.post('/onupload', function(req, res) {
@@ -114,16 +114,32 @@ app.post("/playLaufend", function(req,res){
     res.sendFile(__dirname + "/views/game.html")
 });
 
+
+
 //Anzeige der aktiven Runde und Inhalt aktiver Runde
 app.post("/showRound", function(req,res){
-    const param_gameID = req.body.input_gameID;
+    global.param_gameID = req.body.input_gameID;
     db.each(`SELECT roundsPlayed FROM games WHERE gameID  = ${param_gameID}`, (err, row) => {
         if (err) {
           res.send(err.message);
         } else {
+            const getRound = function(callback){
+                db.each(`SELECT activeRound FROM games WHERE gameID  = 2`, (err, row) => {
+                    if (err) {
+                      res.send(err.message);
+                    } else {
+                        console.log(row.activeRound);
+                        var round = row.activeRound;
+                        callback(round); 
+                    }
+                });
             
-            global.varRounds = row.roundsPlayed;
-            console.log("Test" + varRounds);
+            };
+            
+
+            
+            /*global.varRounds = row.roundsPlayed;
+            console.log("Test" + varRounds);*/
             db.each(`SELECT activeRound FROM games WHERE gameID  = ${param_gameID}`, (err, row) => {
                 if (err) {
                     res.send(err.message);
@@ -132,11 +148,11 @@ app.post("/showRound", function(req,res){
                     console.log(varGame);
                     if (varRounds % 2 == 0){
                         //Runde gerade
-                        res.render("rundeGerade", {"Bild": varGame});
+                        res.render("rundeGerade", {"Bild": varGame}, {"Game": param_gameID}, {"Runde": varRounds});
 
                     } else {
                         //Runde ungerade
-                        res.render("rundeUngerade", {"Text": varGame});
+                        res.render("rundeUngerade", {"Text": varGame}, {"Game": param_gameID}, {"Runde": varRounds});
                     }
 
                 }
@@ -160,9 +176,44 @@ app.post("/Runde1", function(req,res){
         }
     });
 });
-app.post("/RundeGerade", function(req,res){}); 
 
-app.post("/RundeUngerade", function(req,res){});   
+app.post("/Gerade", function(req,res){
+    const param_gameID = req.body.gameID;
+    const param_round = req.body.round;
+    const param_newRound = param_round + 1;
+    const param_img = req.body.img; //<====== Hier bitte Canvas Magic
+
+    db.run( `INSERT INTO games WHERE gameID ='${param_gameID}' 
+    (roundsPlayed, round${param_round}, activeRound) 
+    VALUES (${param_newRound}, '${param_img}', '${param_img}')`, function(err){
+        if (err){
+            res.send(err.message)
+        } else {
+            //res.sendFile(__dirname + "/views/game.html");
+            console.log(`uploaded ${param_img} to round ${param_round} and set RP to ${param_newRound}`);
+            res.send(`uploaded ${param_img} to round ${param_round} and set RP to ${param_newRound}`);
+        }
+    });
+}); 
+
+app.post("/Ungerade", function(req,res){
+    const param_gameID = req.body.gameID;
+    const param_round = req.body.round;
+    const param_newRound = param_round + 1;
+    const param_text = req.body.text;
+
+    db.run( `INSERT INTO games WHERE gameID ='${param_gameID}' 
+    (roundsPlayed, round${param_round}, activeRound) 
+    VALUES (${param_newRound}, '${param_text} ', '${param_text}')`, function(err){
+        if (err){
+            res.send(err.message)
+        } else {
+            //res.sendFile(__dirname + "/views/game.html");
+            console.log(`uploaded ${param_text} to round ${param_round} and set RP to ${param_newRound}`);
+            res.send(`uploaded ${param_text} to round ${param_round} and set RP to ${param_newRound}`);
+        }
+    });
+});   
 
 app.get("/chat", function(req, res){
     res.sendFile(__dirname + "/views/chat.html");
