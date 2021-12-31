@@ -106,55 +106,65 @@ app.post("/play", function(req,res){
     res.redirect("/login");
 });
 
-//Anzeige der aktiven Runde und Inhalt aktiver Runde
+//Spielen-Button von Login
+app.post("/playAngemeldet", function(req,res){    
+    res.sendFile(__dirname + "/views/gameFirst.html");
+});
+app.post("/playLaufend", function(req,res){
+    res.sendFile(__dirname + "/views/game.html")
+});
 
+//Anzeige der aktiven Runde und Inhalt aktiver Runde
 app.post("/showRound", function(req,res){
     const param_gameID = req.body.input_gameID;
     db.each(`SELECT roundsPlayed FROM games WHERE gameID  = ${param_gameID}`, (err, row) => {
         if (err) {
           res.send(err.message);
         } else {
-            const varRounds = row.roundsPlayed;
+            
+            global.varRounds = row.roundsPlayed;
             console.log("Test" + varRounds);
             db.each(`SELECT activeRound FROM games WHERE gameID  = ${param_gameID}`, (err, row) => {
                 if (err) {
                     res.send(err.message);
                 } else {
-                    const varGame = row.activeRound;
+                    global.varGame = row.activeRound;
                     console.log(varGame);
-                    res.send(varRounds + " = " + row.activeRound);
+                    if (varRounds % 2 == 0){
+                        //Runde gerade
+                        res.render("rundeGerade", {"Bild": varGame});
+
+                    } else {
+                        //Runde ungerade
+                        res.render("rundeUngerade", {"Text": varGame});
+                    }
+
                 }
+
             });
         } 
     });
 });
- 
-//Spielen-Button von Login
-app.post("/playAngemeldet", function(req,res){    
-    res.sendFile(__dirname + "/views/gameFirst.html");
-});
 
 // Hier wird die Eingabe aus dem Server in die db gespeichert 
-
-app.post("/RundeUngerade", function(req,res){    
+app.post("/Runde1", function(req,res){    
     const Zeichnen= req.body.wasZeichnen;
 
     console.log(Zeichnen);
-    const oldRound = 4;
-    const newRound = 4 + 1; //call /showRound Variable
-    console.log(newRound);
-
-    db.run( `INSERT INTO games (roundsPlayed, round${oldRound}, activeRound) VALUES (${newRound}, '${ Zeichnen } ', '${Zeichnen}')`, function(err){
+  
+    db.run( `INSERT INTO games (roundsPlayed, round1, activeRound) VALUES (1, '${ Zeichnen } ', '${Zeichnen}')`, function(err){
         if (err){
             res.send(err.message)
         } else {
-            res.sendFile(__dirname + "/views/upload_formular.html"); //sollte Runde speichern, nicht direkt weiterspielen lassen
+            res.sendFile(__dirname + "/views/game.html");
         }
     });
-});   
-//Funkltion noch sehr hardcoded, Versuch, dass flexibler zu machen
+});
+app.post("/RundeGerade", function(req,res){}); 
 
- app.get("/chat", function(req, res){
+app.post("/RundeUngerade", function(req,res){});   
+
+app.get("/chat", function(req, res){
     res.sendFile(__dirname + "/views/chat.html");
 
 });
