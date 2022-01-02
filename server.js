@@ -124,40 +124,57 @@ app.post("/showRound", function(req,res){
           res.send(err.message);
         } else {
             const getRound = function(callback){
-                db.each(`SELECT activeRound FROM games WHERE gameID  = 2`, (err, row) => {
+                db.each(`SELECT activeRound FROM games WHERE gameID  = ${param_gameID}`, (err, row) => {
                     if (err) {
                       res.send(err.message);
                     } else {
                         console.log(row.activeRound);
-                        var round = row.activeRound;
-                        callback(round); 
+                        var param_round = row.activeRound;
+                        callback(param_round); 
                     }
                 });
             
             };
-            
+            const activeRound = function(callback){
+                db.each(`SELECT activeRound FROM games WHERE gameID  = ${param_gameID}`, (err, row) => {
+                    if (err) {
+                        res.send(err.message);
+                    } else {
+                        var varGame = row.activeRound;
+                        callback(varGame);
+                    
+                    }
+                });
+            };
 
+            const setRound = function(param_round, varGame, param_gameID, callback){
+                var game = param_gameID;
+                var round = param_round;
+                var content = varGame;
+                
+                callback([game,round,content]);
+                
+            }
+
+            setRound(getRound, activeRound, req.body.input_gameID);
             
+            const use = function(game, round, content){
+                 console.log(game, round, content);
+            }
+            use(setRound);
+
+
+            if (round % 2 == 0){
+                //Runde gerade
+                res.render("rundeGerade", {"Bild": content}, {"Game": game}, {"Runde": round});
+
+            } else {
+                //Runde ungerade
+                res.render("rundeUngerade", {"Text": content}, {"Game": game}, {"Runde": round});
+            }
             /*global.varRounds = row.roundsPlayed;
             console.log("Test" + varRounds);*/
-            db.each(`SELECT activeRound FROM games WHERE gameID  = ${param_gameID}`, (err, row) => {
-                if (err) {
-                    res.send(err.message);
-                } else {
-                    global.varGame = row.activeRound;
-                    console.log(varGame);
-                    if (varRounds % 2 == 0){
-                        //Runde gerade
-                        res.render("rundeGerade", {"Bild": varGame}, {"Game": param_gameID}, {"Runde": varRounds});
-
-                    } else {
-                        //Runde ungerade
-                        res.render("rundeUngerade", {"Text": varGame}, {"Game": param_gameID}, {"Runde": varRounds});
-                    }
-
-                }
-
-            });
+            
         } 
     });
 });
