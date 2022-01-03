@@ -101,6 +101,26 @@ app.get('/gameZeichnen',function(req,res){
     res.render("gameZeichnen",{"wasZeichnen": wasZeichnen});
 })
 
+app.get('/gameBeginn',function(req,res){
+    res.sendFile(__dirname + '/views/gameFirst.html');
+});
+
+// Hier wird die Eingabe aus dem Server in die db gespeichert 
+app.post("/Runde1", function(req,res){    
+    const wasZeichnen= req.body.wasZeichnen1;
+    res.render("gameZeichnen",{"wasZeichnen": wasZeichnen});
+
+  /* console.log(Zeichnen);
+    db.run( `INSERT INTO games (roundsPlayed, round1, activeRound) VALUES (1, '${ Zeichnen } ', '${Zeichnen}')`, function(err){
+       if (err){
+           res.send(err.message)
+        } else {
+           res.sendFile(__dirname + "/views/game.html");
+        }
+    }); */
+});
+
+
 /*
 app.get('/game', function(req, res){
     res.sendFile(__dirname + '/views/game.html');
@@ -207,7 +227,6 @@ app.post("/Runde1", function(req,res){
     const Zeichnen= req.body.wasZeichnen;
 
     console.log(Zeichnen);
-  
     db.run( `INSERT INTO games (roundsPlayed, round1, activeRound) VALUES (1, '${ Zeichnen } ', '${Zeichnen}')`, function(err){
         if (err){
             res.send(err.message)
