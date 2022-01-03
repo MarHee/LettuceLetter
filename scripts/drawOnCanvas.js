@@ -26,8 +26,8 @@ document.addEventListener('mouseenter', setPosition);
 
 // new position from mouse event
 function setPosition(e) {
-  pos.x = e.clientX -5; 
-  pos.y = e.clientY -160 ; 
+  pos.x = e.clientX -10; 
+  pos.y = e.clientY -235 ; 
 }
 
 function draw(e) {

@@ -1,0 +1,139 @@
+<html>	
+	<head> 
+<!-- Vont Chat head eingefügt-->
+
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+		<title>Lettuce Letter</title>
+		<meta name="author" content="Codeconvey" />
+		
+		<!-- Style CSS implementieren-->
+		<link rel="stylesheet" href="chat.css">
+		
+
+<!-- Ab hier  wieder Zeichnen-->
+
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<!-- Upload-Script -->
+		<script>
+			// Anzeigen des vorher gespecherten Textes hier?
+			function initialize(){
+				
+				// uploadbutton
+				const button = document.getElementById("uploadButton");
+				button.onclick = onUploadButtonClicked;
+				
+				function onUploadButtonClicked() {
+					// Lädt die Zeichnung als PNG zum Server hoch
+					const dataURL = document.getElementById("canvas").toDataURL("image/png");
+					
+					// AJAX-Aufruf, verwendet hier jquery
+					$.post('/onupload', {
+						img: dataURL
+					});
+				}
+				
+			}
+		</script>
+	</head>
+	<body onload="initialize()">
+		<br>
+
+		<!-- Von Chat body eingefügt-->
+
+		
+<header class="ScriptHeader">
+    <div class="rt-container">
+    	<div class="col-rt-12">
+        	<div class="rt-heading">
+            	<h1>Lettuce Letter - LETTUCE PLAY!</h1>
+                <p>Draw Something</p>
+            </div>
+        </div>
+    </div>
+</header>
+
+<section>   
+    <div class="rt-container">
+          <div class="col-rt-12">
+              <div class="Scriptcontent">
+            
+<!-- partial:index.partial.html -->
+<section id="app">
+  <div class="container">
+    <button type="button" class='primaryContained' onclick="openChat()">Open Chat</button>
+  
+      <div class="row">
+        <div class="col-6">
+          <div class="comment">
+        <p v-for="items in item" v-text="items"></p>
+          </div><!--End Comment-->
+          </div><!--End col -->
+          </div><!-- End row -->
+      <div class="row">
+        <div class="col-6">
+          <div class="chatbox" id="chatbox">
+            <h2>Commentary Box</h2>
+          <textarea type="text" class="input" placeholder="Write a comment" v-model="newItem" @keyup.enter="addItem()"></textarea>
+          <button v-on:click="addItem()" class='primaryContained float-right' type="submit">Add Comment</button>
+          <button type="button" class='primaryContained float-right' class="btn btn-danger btn-lg btn-close" onclick="closeChat()">Close</button>
+        </div><!-- End col -->
+      </div><!--End Row -->
+    </div><!--End Container -->
+
+    <script type="text/javascript">
+      function openChat() {
+        document.getElementById('chatbox').style.display='block';
+        $('.button.primaryContained').hide();
+      }
+      function closeChat() {
+        document.getElementById('chatbox').style.display='none';
+        $('.button.primaryContained').show();
+      }
+</script>
+    
+  </section><!-- end App -->
+<!-- partial -->
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.17/vue.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script  src="comment.js"></script>
+      
+    </div>
+		</div>
+    </div>
+</section>
+
+
+
+
+
+
+
+
+		<!-- Ab hier wieder Zeichnen -->
+		<!--getRound Funktion -> Anzeige-->
+
+
+<!--  
+		<br>
+		<script src="drawOnCanvas.js"></script><br>
+		<p></p>
+		<button type="button" id="uploadButton" class='primaryContained float-left'>Bild auf Server speichern (hochladen)</button>  setRound Funktion
+
+-->
+
+		<a href="/bildzeigen"><button type="button" class='primaryContained float-right'>Gespeichertes Bild anzeigen</button></a>
+
+        <form action="/gameSchreiben" method="POST">
+            Was wurde hier gezeichnet: <br>
+            <input type="text" name="zeichnenAntwort"><br>
+            <button type="submit">Fertig</button>
+
+          </form> 
+
+	</body>
+</html>

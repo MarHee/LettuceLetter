@@ -94,6 +94,13 @@ app.get('/register', function(req, res){
 app.get('/test', function(req, res){
     res.sendFile(__dirname + '/views/test.html');
 });
+
+let wasZeichnen = " fliegende Kuh mit Krone"; // in diesen String setze was gezeichnet werden soll
+
+app.get('/gameZeichnen',function(req,res){
+    res.render("gameZeichnen",{"wasZeichnen": wasZeichnen});
+})
+
 /*
 app.get('/game', function(req, res){
     res.sendFile(__dirname + '/views/game.html');
@@ -114,6 +121,22 @@ app.post("/playLaufend", function(req,res){
     res.sendFile(__dirname + "/views/game.html")
 });
 
+// Aufrug für gameSchreiben
+app.get('/schreiben',function(req,res){
+    res.sendFile(__dirname + '/views/gameSchreiben.html');
+})
+
+
+// POST von gameSchreiben
+app.post("/gameSchreiben", function(req,res){
+    const antwortGezeichnet= req.body.zeichnenAntwort; //hier wird die Antwort des Users drin gespeichert
+
+    res.render("gameZeichnen",{"wasZeichnen": antwortGezeichnet});
+    
+    //console.log(antwortGezeichnet);
+
+
+});
 
 
 //Anzeige der aktiven Runde und Inhalt aktiver Runde
@@ -238,9 +261,9 @@ app.get("/chat", function(req, res){
 });
 
 //Zeichenfunktion
-app.get("/spielen",function(req,res){
-    res.sendFile(__dirname + "/views/upload_formular.html");
-})
+// app.get("/spielen",function(req,res){
+//    res.sendFile(__dirname + "/views/upload_formular.html");
+// })
 
 /*app.get("/activegames", function(req, res){
     res.render("activegames")
