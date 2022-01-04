@@ -66,14 +66,14 @@ app.post('/onupload', function(req, res) {
     var buffer = new Buffer.from(matches[2], 'base64');
   
     // speichert die Datei im Ordner images (der muss natürlich existieren)
-    testFilename = activeGameID + Date.now() + ".png"; //TODO: Dateinamen in GameID+Runde ändern
-    // console.log(testFilename);
+    testFilename = activeGameID + Date.now() + ".png";
+    // console.log(testFilename); 
     fs.writeFile(__dirname + "/images/" + testFilename, buffer, function (err) {
       console.log("done");
     });
   });
   
-  // Zeigt das Bild an 
+  // Zeigt das Bild an
 app.get('/bildzeigen', function(req, res){
     // console.log(testFilename);
     res.render("bildzeigen", {"filename": testFilename});
@@ -128,7 +128,7 @@ app.get('/game', function(req, res){
 */
 
 //Play-Button von Start
-// Testen ob User angemeldet ist?  --> Session gedöns
+// Testen ob User angemeldet ist?  --> Session gedöns?
 app.post("/play", function(req,res){    
     res.redirect("/login");
 });
@@ -240,7 +240,7 @@ app.post("/Gerade", function(req,res){
     const param_gameID = req.body.gameID;
     const param_round = req.body.round;
     const param_newRound = param_round + 1;
-    const param_img = req.body.img; //<====== Hier bitte Canvas Magic
+    const param_img = req.body.img; //variable "testFilename"
 
     db.run( `INSERT INTO games WHERE gameID ='${param_gameID}' 
     (roundsPlayed, round${param_round}, activeRound) 
@@ -259,7 +259,7 @@ app.post("/Ungerade", function(req,res){
     const param_gameID = req.body.gameID;
     const param_round = req.body.round;
     const param_newRound = param_round + 1;
-    const param_text = req.body.text;
+    const param_text = req.body.text; //variable "wasZeichnen"
 
     db.run( `INSERT INTO games WHERE gameID ='${param_gameID}' 
     (roundsPlayed, round${param_round}, activeRound) 
