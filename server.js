@@ -323,8 +323,7 @@ app.post('/userRegister', function(req, res){
             if (err){
                 res.send(err.message)
             } else {
-                res.send("Willkommen " + param_usernameInput);
-            }
+                res.render("loginErfolgreich", {"benutzername": param_usernameInput});            }
         });   
     } 
 });
