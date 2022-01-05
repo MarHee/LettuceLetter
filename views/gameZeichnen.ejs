@@ -43,6 +43,8 @@
     <!-- Anzeigen was gezeichnet werden soll als Text-->
 
     <h2>
+        Game <%= Game%>
+        Runde <%= Runde%>
         Zeichne bitte:<br>
         <%= wasZeichnen %> 
     </h2>
@@ -140,7 +142,9 @@
 -->
 
 <!-- Verlinkung zum Schreiben-->
-<a href="/schreiben">weiter</a>
+<input type="number" name="gameID" value=<%= Game%> hidden> <!--Übergabe der Werte, nicht sichtbar auf Seite-->
+<input type="number" name="round" value=<%= Runde%> hidden>
+<a href="/zeichnenFertig">weiter</a>
 
 	</body>
 </html>
