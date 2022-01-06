@@ -42,7 +42,7 @@ app.listen(3000, function(){
 const fs = require('fs');
 const req = require('express/lib/request');
 
-//TODO brauchen wir die noch?
+//TODO brauchen wir die noch? Eigentlich Nein, nur um zu testen ob das zeichnen an sich noch geht
 
 // Hier kann man zeichnen und Bilder hochladen in images
 // app.get("/upload", function(req, res){
@@ -66,6 +66,7 @@ app.post('/onupload', function(req, res) {
     // console.log(testFilename); 
     fs.writeFile(__dirname + "/images/" + testFilename, buffer, function (err) {
       console.log("done");
+      console.log("Bild gespeichert unter :" + testFilename);
     });
   });
   
@@ -73,6 +74,7 @@ app.post('/onupload', function(req, res) {
     app.get('/bildzeigen', function(req, res){
     // console.log(testFilename);
     res.render("bildzeigen", {"filename": testFilename});
+    console.log("Ich zeige Bild: "+ testFilename );
   }); //TODO zeigt leider Bild nicht, referiert auf testFilename, was aber auch nicht angezeigt wird, wenn es eins der Bilder in images ist
     
 
@@ -93,7 +95,7 @@ app.get('/test', function(req, res){
     res.sendFile(__dirname + '/views/test.html');
 });
 
-//TODO wird diese Funktion irgendwo aufgerufen?
+//TODO wird diese Funktion irgendwo aufgerufen? Ist ja ein Serveraufruf localhost:3000/gameBeginn . Wird nicht 
 app.get('/gameBeginn',function(req,res){
     res.sendFile(__dirname + '/views/gameFirst.html');
 });
@@ -118,22 +120,6 @@ app.get('/gameZeichnen',function(req,res){
     res.render("gameZeichnen",{"wasZeichnen": wasZeichnen});
 })
 
-
-//TODO brauchen wir dieses Runde1?
-/*// Hier wird die Eingabe aus dem Server in die db gespeichert 
-app.post("/Runde1", function(req,res){    
-    const wasZeichnen= req.body.wasZeichnen1;
-    res.render("gameZeichnen",{"wasZeichnen": wasZeichnen});
-
-  /* console.log(Zeichnen);
-    db.run( `INSERT INTO games (roundsPlayed, round1, activeRound) VALUES (1, '${ Zeichnen } ', '${Zeichnen}')`, function(err){
-       if (err){
-           res.send(err.message)
-        } else {
-           res.sendFile(__dirname + "/views/game.html");
-        }
-    }); 
-});*/
 
 //auskommentiert weil redundant
 /*//Play-Button von Start
@@ -217,7 +203,8 @@ app.post("/zeichnenFertig", function(req,res){
     const param_gameID = req.body.gameID;
     const param_round = req.body.round-1;
     const param_newRound = req.body.round;
-    const param_img = req.body.testFilename; //TODO richtiger Aufruf des Inhalts der Canvas???
+    const param_img =  testFilename; //TODO richtiger Aufruf des Inhalts der Canvas???
+    console.log(testFilename); // nur zum testen
 
     //Einfügen der Werte in Datenbank-Zeile mit übergebener GameID
     db.run( `INSERT INTO games WHERE gameID ='${param_gameID}' 
@@ -255,11 +242,10 @@ app.post("/gameSchreiben", function(req,res){
     });
 });   
 
-//TODO Brauchen wir die hier noch?
-//Zeichenfunktion
-// app.get("/spielen",function(req,res){
-//    res.sendFile(__dirname + "/views/upload_formular.html");
-// }) 
+
+app.get("/spielen",function(req,res){
+   res.sendFile(__dirname + "/views/upload_formular.html");
+}) ;
 
 //Loginfunktion
 app.post("/userLogin", function(req, res){
