@@ -229,7 +229,6 @@ app.post("/zeichnenFertig", function(req,res){
             //Log der gespeicherten Werte und Weiterleitung auf Option, in weiteres laufendes Game einzusteigen => evtl Auswahl Neu/Laufend?
             console.log(`uploaded ${param_img} to round ${param_round} and set RP to ${param_newRound}`);
             res.sendFile(__dirname + "/views/game.html");
-            //res.send(`uploaded ${param_img} to round ${param_round} and set RP to ${param_newRound}`);
         }
     });
 }); 
@@ -251,7 +250,6 @@ app.post("/gameSchreiben", function(req,res){
         } else {
             //Log der gespeicherten Werte und Weiterleitung auf Option, in weiteres laufendes Game einzusteigen => evtl Auswahl Neu/Laufend?
             console.log(`uploaded ${param_text} to round ${param_round} and set RP to ${param_newRound}`);
-            //res.send(`uploaded ${param_text} to round ${param_round} and set RP to ${param_newRound}`);
             res.sendFile(__dirname + "/views/game.html");
         }
     });
