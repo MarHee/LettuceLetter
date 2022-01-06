@@ -77,7 +77,7 @@ app.post('/onupload', function(req, res) {
     app.get('/bildzeigen', function(req, res){
     // console.log(testFilename);
     res.render("bildzeigen", {"filename": testFilename});
-  });
+  }); // zeigt leider Bild nicht, referiert auf testFilename, was aber auch nicht angezeigt wird, wenn es eins der Bilder in images ist
     
     
 app.use(express.static(__dirname + '/views'));    
