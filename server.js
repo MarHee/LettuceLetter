@@ -42,20 +42,16 @@ app.listen(3000, function(){
 const fs = require('fs');
 const req = require('express/lib/request');
 
+//TODO brauchen wir die noch?
+
 // Hier kann man zeichnen und Bilder hochladen in images
 // app.get("/upload", function(req, res){
  //   res.sendFile(__dirname + "/views/upload_formular_canvas.html");
-// });
+// }); 
 
 let testFilename = "Dateiname Bild";
 
-/* TODO:
-    GameSessionID & Runde in Bild Dateinamen
-    Verknüpfung mit Gametable
-    Bild aus Datenbank abrufen & anzeigen
-*/
-
-let activeGameID = "Game" + 2; //???
+let activeGameID = "Game" + 2; //Brauchen wir die noch?
 
 // Auswertung des Upload-Formulars
 app.post('/onupload', function(req, res) {
@@ -77,9 +73,11 @@ app.post('/onupload', function(req, res) {
     app.get('/bildzeigen', function(req, res){
     // console.log(testFilename);
     res.render("bildzeigen", {"filename": testFilename});
-  }); // zeigt leider Bild nicht, referiert auf testFilename, was aber auch nicht angezeigt wird, wenn es eins der Bilder in images ist
+  }); //TODO zeigt leider Bild nicht, referiert auf testFilename, was aber auch nicht angezeigt wird, wenn es eins der Bilder in images ist
     
-    
+
+
+//Aufrufe der views Seiten im respektiven Ordner
 app.use(express.static(__dirname + '/views'));    
 
 app.get('/login', function(req, res){
@@ -95,16 +93,33 @@ app.get('/test', function(req, res){
     res.sendFile(__dirname + '/views/test.html');
 });
 
+//TODO wird diese Funktion irgendwo aufgerufen?
+app.get('/gameBeginn',function(req,res){
+    res.sendFile(__dirname + '/views/gameFirst.html');
+});
+
+app.get('/game', function(req, res){
+    res.sendFile(__dirname + '/views/game.html');
+});
+
+// Aufrug für gameSchreiben
+app.get('/gameSchreiben',function(req,res){
+    res.sendFile(__dirname + '/views/gameSchreiben.html');
+})
+
+app.get("/chat", function(req, res){
+    res.sendFile(__dirname + "/views/chat.html");
+
+});
+
 let wasZeichnen = " fliegende Kuh mit Krone"; // in diesen String setze was gezeichnet werden soll
 
 app.get('/gameZeichnen',function(req,res){
     res.render("gameZeichnen",{"wasZeichnen": wasZeichnen});
 })
 
-app.get('/gameBeginn',function(req,res){
-    res.sendFile(__dirname + '/views/gameFirst.html');
-});
 
+//TODO brauchen wir dieses Runde1?
 /*// Hier wird die Eingabe aus dem Server in die db gespeichert 
 app.post("/Runde1", function(req,res){    
     const wasZeichnen= req.body.wasZeichnen1;
@@ -120,10 +135,7 @@ app.post("/Runde1", function(req,res){
     }); 
 });*/
 
-app.get('/game', function(req, res){
-    res.sendFile(__dirname + '/views/game.html');
-});
-
+//auskommentiert weil redundant
 /*//Play-Button von Start
 app.post("/play", function(req,res){    
     res.redirect("/login");
@@ -137,12 +149,6 @@ app.post("/playLaufend", function(req,res){
     res.sendFile(__dirname + "/views/game.html")
 });
 
-
-// Aufrug für gameSchreiben
-app.get('/gameSchreiben',function(req,res){
-    res.sendFile(__dirname + '/views/gameSchreiben.html');
-})
-
 /*
 // POST von gameSchreiben
 app.post("/gameSchreiben", function(req,res){
@@ -154,15 +160,18 @@ app.post("/gameSchreiben", function(req,res){
 
 
 });*/
+//auskommentiert weil nicht mit Datenbank verbunden und führt direkt zu nächster Runde desselben Games
 
 
 //Anzeige der aktiven Runde und Inhalt aktiver Runde
 app.post("/showRound", function(req,res){
+    //Eingabe GameID
     param_gameID = req.body.input_gameID;
-    db.all(`SELECT * FROM games WHERE gameID  = ${param_gameID}`, (err, row) => {
+    //Datenbank Abruf aller Daten zu diesem Game
+    db.all(`SELECT * FROM games WHERE gameID  = ${param_gameID}`, (err, row) => { 
         if (err) {
           res.send(err.message);
-        } else if (row.length > 0) {
+        } else if (row.length > 0) { //nur wenn es diese Zeile aka ein Game mit dieser GameID gibt
             // Result Row
             const result = row[0];
             // Values of retrieved columns
@@ -171,46 +180,53 @@ app.post("/showRound", function(req,res){
             const activeRound = result.activeRound;
 
             if (roundsPlayed % 2 == 0){
-                //Spiel einer UNgeraden Runde, also schreiben
+                //Runde vorher gerade => Spiel einer UNgeraden Runde, also schreiben
                 res.sendFile("gameSchreiben", {"Game": gameID, "Runde": roundsPlayed +1, "filename": activeRound});
 
             } else {
-                //Spiel einer geraden Runde, also zeichnen
+                //Runde vorher ungerade => Spiel einer geraden Runde, also zeichnen
                 res.render("gameZeichnen", {"Game": gameID, "Runde": roundsPlayed, "wasZeichnen": activeRound});
             }            
         } else {
             res.send("Fehler: Kein Game mit dieser ID gefunden.");
+            //eventuell Weiterleitung auf newGame?
         }
     });
 });
 
-// Hier wird die Eingabe aus dem Server in die db gespeichert 
-app.post("/Runde1", function(req,res){    
+// Hier wird die Eingabe zu einem neuen Game aus dem Server in die db gespeichert 
+app.post("/Runde1", function(req,res){   
+    // Inhalt des Textfeldes 
     const Zeichnen= req.body.wasZeichnen;
 
     console.log(Zeichnen);
+    //erstellt neue Zeile in games Tabelle mit einer gespielten Runde und dem Inhalt des Textfeldes
     db.run( `INSERT INTO games (roundsPlayed, round1, activeRound) VALUES (1, '${ Zeichnen } ', '${Zeichnen}')`, function(err){
         if (err){
             res.send(err.message)
         } else {
+            //nach hochladen des neuen Games Weiterleitung auf Option, Laufende Games weiterzuspielen ==> eventuell eher auf LoginErfolgreich?
             res.sendFile(__dirname + "/views/game.html");
         }
     });
 });
 
 app.post("/zeichnenFertig", function(req,res){
+    
+    //Input aus Zeichnen-Runde in Variablen
     const param_gameID = req.body.gameID;
     const param_round = req.body.round-1;
     const param_newRound = req.body.round;
-    const param_img = req.body.img; //variable "testFilename"
+    const param_img = req.body.testFilename; //TODO richtiger Aufruf des Inhalts der Canvas???
 
+    //Einfügen der Werte in Datenbank-Zeile mit übergebener GameID
     db.run( `INSERT INTO games WHERE gameID ='${param_gameID}' 
     (roundsPlayed, round${param_round}, activeRound) 
     VALUES (${param_newRound}, '${param_img}', '${param_img}')`, function(err){
         if (err){
             res.send(err.message)
         } else {
-            //
+            //Log der gespeicherten Werte und Weiterleitung auf Option, in weiteres laufendes Game einzusteigen => evtl Auswahl Neu/Laufend?
             console.log(`uploaded ${param_img} to round ${param_round} and set RP to ${param_newRound}`);
             res.sendFile(__dirname + "/views/game.html");
             //res.send(`uploaded ${param_img} to round ${param_round} and set RP to ${param_newRound}`);
@@ -219,18 +235,21 @@ app.post("/zeichnenFertig", function(req,res){
 }); 
 
 app.post("/gameSchreiben", function(req,res){
+
+    //Input aus Schreiben-Runde in Variablen
     const param_gameID = req.body.gameID;
     const param_round = req.body.round-1;
     const param_newRound = req.body.round;
-    const param_text = req.body.zeichnenAntwort; //variable "wasZeichnen"
+    const param_text = req.body.zeichnenAntwort;
 
+    //Einfügen der Werte in Datenbank-Zeile mit übergebener GameID
     db.run( `INSERT INTO games WHERE gameID ='${param_gameID}' 
     (roundsPlayed, round${param_round}, activeRound) 
     VALUES (${param_newRound}, '${param_text} ', '${param_text}')`, function(err){
         if (err){
             res.send(err.message)
         } else {
-            //
+            //Log der gespeicherten Werte und Weiterleitung auf Option, in weiteres laufendes Game einzusteigen => evtl Auswahl Neu/Laufend?
             console.log(`uploaded ${param_text} to round ${param_round} and set RP to ${param_newRound}`);
             //res.send(`uploaded ${param_text} to round ${param_round} and set RP to ${param_newRound}`);
             res.sendFile(__dirname + "/views/game.html");
@@ -238,20 +257,11 @@ app.post("/gameSchreiben", function(req,res){
     });
 });   
 
-app.get("/chat", function(req, res){
-    res.sendFile(__dirname + "/views/chat.html");
-
-});
-
+//TODO Brauchen wir die hier noch?
 //Zeichenfunktion
 // app.get("/spielen",function(req,res){
 //    res.sendFile(__dirname + "/views/upload_formular.html");
-// })
-
-/*app.get("/activegames", function(req, res){
-    res.render("activegames")
-});
-*/
+// }) 
 
 //Loginfunktion
 app.post("/userLogin", function(req, res){
