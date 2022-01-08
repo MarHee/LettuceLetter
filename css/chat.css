@@ -1,6 +1,6 @@
 .container {
-	max-width: 440px;
-	margin: 30px auto;
+	max-width: 280px;
+	margin: 25px auto;
 	background: #94cf03;
 	border-radius: 8px;
 	padding: 20px;
@@ -48,4 +48,10 @@ button.primaryContained {
 
 button.primaryContained:hover {
 	background: #202e01;
+}
+
+.vertikal-flex {
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
