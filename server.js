@@ -167,7 +167,7 @@ app.post("/showRound", function(req,res){
 
             if (roundsPlayed % 2 == 0){
                 //Runde vorher gerade => Spiel einer UNgeraden Runde, also schreiben
-                res.sendFile("gameSchreiben", {"Game": gameID, "Runde": roundsPlayed +1, "filename": activeRound});
+                res.render("gameSchreiben", {"Game": gameID, "Runde": roundsPlayed +1, "filename": activeRound});
 
             } else {
                 //Runde vorher ungerade => Spiel einer geraden Runde, also zeichnen
@@ -207,9 +207,10 @@ app.post("/zeichnenFertig", function(req,res){
     console.log(testFilename); // nur zum testen
 
     //Einfügen der Werte in Datenbank-Zeile mit übergebener GameID
-    db.run( `INSERT INTO games WHERE gameID ='${param_gameID}' 
-    (roundsPlayed, round${param_round}, activeRound) 
-    VALUES (${param_newRound}, '${param_img}', '${param_img}')`, function(err){
+    db.run( `UPDATE TABLE games WHERE gameID ='${param_gameID}' 
+    SET roundsPlayed=${param_newRound}, 
+     round${param_round}='${param_img}',
+     activeRound='${param_img}'`, function(err){
         if (err){
             res.send(err.message)
         } else {
@@ -229,9 +230,10 @@ app.post("/gameSchreiben", function(req,res){
     const param_text = req.body.zeichnenAntwort;
 
     //Einfügen der Werte in Datenbank-Zeile mit übergebener GameID
-    db.run( `INSERT INTO games WHERE gameID ='${param_gameID}' 
-    (roundsPlayed, round${param_round}, activeRound) 
-    VALUES (${param_newRound}, '${param_text} ', '${param_text}')`, function(err){
+    db.run( `UPDATE TABLE games WHERE gameID ='${param_gameID}' 
+    SET roundsPlayed=${param_newRound}, 
+     round${param_round}='${param_text}',
+     activeRound='${param_text}'`, function(err){
         if (err){
             res.send(err.message)
         } else {
