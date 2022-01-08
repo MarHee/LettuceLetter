@@ -207,7 +207,7 @@ app.post("/zeichnenFertig", function(req,res){
     console.log(testFilename); // nur zum testen
 
     //Einfügen der Werte in Datenbank-Zeile mit übergebener GameID
-    db.run( `UPDATE TABLE games WHERE gameID ='${param_gameID}' 
+    db.run( `UPDATE games WHERE gameID ='${param_gameID}' 
     SET roundsPlayed=${param_newRound}, 
      round${param_round}='${param_img}',
      activeRound='${param_img}'`, function(err){
@@ -230,7 +230,7 @@ app.post("/gameSchreiben", function(req,res){
     const param_text = req.body.zeichnenAntwort;
 
     //Einfügen der Werte in Datenbank-Zeile mit übergebener GameID
-    db.run( `UPDATE TABLE games WHERE gameID ='${param_gameID}' 
+    db.run( `UPDATE games WHERE gameID ='${param_gameID}' 
     SET roundsPlayed=${param_newRound}, 
      round${param_round}='${param_text}',
      activeRound='${param_text}'`, function(err){
