@@ -153,26 +153,32 @@ app.post("/gameSchreiben", function(req,res){
 app.post("/showRound", function(req,res){
     //Eingabe GameID
     param_gameID = req.body.input_gameID;
+    
     //Datenbank Abruf aller Daten zu diesem Game
     db.all(`SELECT * FROM games WHERE gameID  = ${param_gameID}`, (err, row) => { 
         if (err) {
           res.send(err.message);
         } else if (row.length > 0) { //nur wenn es diese Zeile aka ein Game mit dieser GameID gibt
             // Result Row
-            const result = row[0];
-            // Values of retrieved columns
-            const gameID = result.gameID;   
-            const roundsPlayed = result.roundsPlayed;
-            const activeRound = result.activeRound;
+            
+                 const result = row[0];
+                // Values of retrieved columns
+                const gameID = result.gameID;   
+                const roundsPlayed = result.roundsPlayed;
+                const activeRound = result.activeRound;
+            if (result.active == 1){
+                if (roundsPlayed % 2 == 0){
+                    //Runde vorher gerade => Spiel einer UNgeraden Runde, also schreiben
+                    res.render("gameSchreiben", {"Game": gameID, "Runde": roundsPlayed +1, "filename": activeRound});
 
-            if (roundsPlayed % 2 == 0){
-                //Runde vorher gerade => Spiel einer UNgeraden Runde, also schreiben
-                res.render("gameSchreiben", {"Game": gameID, "Runde": roundsPlayed +1, "filename": activeRound});
-
+                } else {
+                    //Runde vorher ungerade => Spiel einer geraden Runde, also zeichnen
+                    res.render("gameZeichnen", {"Game": gameID, "Runde": roundsPlayed +1, "wasZeichnen": activeRound});
+                }  
             } else {
-                //Runde vorher ungerade => Spiel einer geraden Runde, also zeichnen
-                res.render("gameZeichnen", {"Game": gameID, "Runde": roundsPlayed, "wasZeichnen": activeRound});
-            }            
+                res.send("Dieses Game ist bereits beendet");
+            }
+                      
         } else {
             res.send("Fehler: Kein Game mit dieser ID gefunden.");
             //eventuell Weiterleitung auf newGame?
@@ -201,16 +207,17 @@ app.post("/zeichnenFertig", function(req,res){
     
     //Input aus Zeichnen-Runde in Variablen
     const param_gameID = req.body.gameID;
-    const param_round = req.body.round-1;
-    const param_newRound = req.body.round;
+    const param_round = req.body.round;
+    const param_newRound = req.body.round+1;
     const param_img =  testFilename; //TODO richtiger Aufruf des Inhalts der Canvas???
     console.log(testFilename); // nur zum testen
 
     //Einfügen der Werte in Datenbank-Zeile mit übergebener GameID
-    db.run( `UPDATE games WHERE gameID ='${param_gameID}' 
-    SET roundsPlayed=${param_newRound}, 
+    db.run( `UPDATE games  
+    SET roundsPlayed=${param_round}, 
      round${param_round}='${param_img}',
-     activeRound='${param_img}'`, function(err){
+     activeRound='${param_img}'
+     WHERE gameID ='${param_gameID}'`, function(err){
         if (err){
             res.send(err.message)
         } else {
@@ -219,21 +226,25 @@ app.post("/zeichnenFertig", function(req,res){
             res.sendFile(__dirname + "/views/game.html");
         }
     });
+    if (param_round >= 7){
+            db.run(`UPDATE games SET active = 0 WHERE gameID = ${param_gameID}`);
+        }
 }); 
 
 app.post("/gameSchreiben", function(req,res){
 
     //Input aus Schreiben-Runde in Variablen
     const param_gameID = req.body.gameID;
-    const param_round = req.body.round-1;
-    const param_newRound = req.body.round;
+    const param_round = req.body.round;
+    const param_newRound = req.body.round+1;
     const param_text = req.body.zeichnenAntwort;
 
     //Einfügen der Werte in Datenbank-Zeile mit übergebener GameID
-    db.run( `UPDATE games WHERE gameID ='${param_gameID}' 
-    SET roundsPlayed=${param_newRound}, 
+    db.run( `UPDATE games  
+    SET roundsPlayed=${param_round}, 
      round${param_round}='${param_text}',
-     activeRound='${param_text}'`, function(err){
+     activeRound='${param_text}'
+     WHERE gameID ='${param_gameID}'`, function(err){
         if (err){
             res.send(err.message)
         } else {
@@ -242,6 +253,9 @@ app.post("/gameSchreiben", function(req,res){
             res.sendFile(__dirname + "/views/game.html");
         }
     });
+    if (param_round >= 7){
+        db.run(`UPDATE games SET active = 0 WHERE gameID = ${param_gameID}`);
+    }
 });   
 
 
