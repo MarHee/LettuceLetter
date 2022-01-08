@@ -211,6 +211,8 @@ app.post("/zeichnenFertig", function(req,res){
     const param_newRound = req.body.round+1;
     const param_img =  testFilename; //TODO richtiger Aufruf des Inhalts der Canvas???
     console.log(testFilename); // nur zum testen
+    console.log(param_img) // ist genau das was testFilename ist und mit testFilename wird in Zeile 76 bildzeigen aufgerufen was geht
+    // unter local.../spielen kann man sehen das der bildanzeigen button geht.
 
     //Einfügen der Werte in Datenbank-Zeile mit übergebener GameID
     db.run( `UPDATE games  
@@ -219,7 +221,7 @@ app.post("/zeichnenFertig", function(req,res){
      activeRound='${param_img}'
      WHERE gameID ='${param_gameID}'`, function(err){
         if (err){
-            res.send(err.message)
+            res.send(err.message) 
         } else {
             //Log der gespeicherten Werte und Weiterleitung auf Option, in weiteres laufendes Game einzusteigen => evtl Auswahl Neu/Laufend?
             console.log(`uploaded ${param_img} to round ${param_round} and set RP to ${param_newRound}`);
