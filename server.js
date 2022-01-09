@@ -49,7 +49,9 @@ const req = require('express/lib/request');
  //   res.sendFile(__dirname + "/views/upload_formular_canvas.html");
 // }); 
 
-let testFilename = "Dateiname Bild";
+let galerie = "Game21641204783087.png"
+
+let testFilename = "Game21641204783087.png";
 
 let activeGameID = "Game" + 2; //Brauchen wir die noch?
 
