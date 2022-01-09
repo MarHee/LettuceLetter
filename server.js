@@ -161,24 +161,26 @@ app.post("/showRound", function(req,res){
         } else if (row.length > 0) { //nur wenn es diese Zeile aka ein Game mit dieser GameID gibt
             // Result Row
             
-                 const result = row[0];
-                // Values of retrieved columns
-                const gameID = result.gameID;   
-                const roundsPlayed = result.roundsPlayed;
-                const activeRound = result.activeRound;
+            const result = row[0];
+            // Values of retrieved columns
+            const gameID = result.gameID;   
+            const round = result.roundsPlayed + 1;
+            const activeRound = result.activeRound;
+            console.log("pushing - ID: "+ gameID + ", Runde: " + round);
+
             if (result.active == 1){
-                if (roundsPlayed % 2 == 0){
+                if (round % 2 != 0){
                     //Runde vorher gerade => Spiel einer UNgeraden Runde, also schreiben
-                    res.render("gameSchreiben", {"Game": gameID, "Runde": roundsPlayed +1, "filename": activeRound});
+                    res.render("gameSchreiben", {"Game": gameID, "Runde": round, "filename": activeRound});
 
                 } else {
                     //Runde vorher ungerade => Spiel einer geraden Runde, also zeichnen
-                    res.render("gameZeichnen", {"Game": gameID, "Runde": roundsPlayed +1, "wasZeichnen": activeRound});
+                    res.render("gameZeichnen", {"Game": gameID, "Runde": round, "wasZeichnen": activeRound});
                 }  
             } else {
                 res.send("Dieses Game ist bereits beendet");
             }
-                      
+                    
         } else {
             res.send("Fehler: Kein Game mit dieser ID gefunden.");
             //eventuell Weiterleitung auf newGame?
@@ -193,7 +195,7 @@ app.post("/Runde1", function(req,res){
 
     console.log(Zeichnen);
     //erstellt neue Zeile in games Tabelle mit einer gespielten Runde und dem Inhalt des Textfeldes
-    db.run( `INSERT INTO games (roundsPlayed, round1, activeRound) VALUES (1, '${ Zeichnen } ', '${Zeichnen}')`, function(err){
+    db.run( `INSERT INTO games (roundsPlayed, active , round1, activeRound) VALUES (1, 1, '${ Zeichnen } ', '${Zeichnen}')`, function(err){
         if (err){
             res.send(err.message)
         } else {
@@ -208,23 +210,23 @@ app.post("/zeichnenFertig", function(req,res){
     //Input aus Zeichnen-Runde in Variablen
     const param_gameID = req.body.gameID;
     const param_round = req.body.round;
-    const param_newRound = req.body.round+1;
     const param_img =  testFilename; //TODO richtiger Aufruf des Inhalts der Canvas???
+    console.log("Upload - ID: "+param_gameID + ", Runde: " + param_round);
     console.log(testFilename); // nur zum testen
-    console.log(param_img) // ist genau das was testFilename ist und mit testFilename wird in Zeile 76 bildzeigen aufgerufen was geht
+    console.log(param_img); // ist genau das was testFilename ist und mit testFilename wird in Zeile 76 bildzeigen aufgerufen was geht
     // unter local.../spielen kann man sehen das der bildanzeigen button geht.
 
     //Einfügen der Werte in Datenbank-Zeile mit übergebener GameID
     db.run( `UPDATE games  
-    SET roundsPlayed=${param_round}, 
+     SET roundsPlayed=${param_round}, 
      round${param_round}='${param_img}',
      activeRound='${param_img}'
-     WHERE gameID ='${param_gameID}'`, function(err){
+     WHERE gameID =${param_gameID}`, function(err){
         if (err){
             res.send(err.message) 
         } else {
             //Log der gespeicherten Werte und Weiterleitung auf Option, in weiteres laufendes Game einzusteigen => evtl Auswahl Neu/Laufend?
-            console.log(`uploaded ${param_img} to round ${param_round} and set RP to ${param_newRound}`);
+            console.log(`uploaded ${param_img} to round ${param_round} and set RP to ${param_round}`);
             res.sendFile(__dirname + "/views/game.html");
         }
     });
@@ -238,7 +240,6 @@ app.post("/gameSchreiben", function(req,res){
     //Input aus Schreiben-Runde in Variablen
     const param_gameID = req.body.gameID;
     const param_round = req.body.round;
-    const param_newRound = req.body.round+1;
     const param_text = req.body.zeichnenAntwort;
 
     //Einfügen der Werte in Datenbank-Zeile mit übergebener GameID
@@ -246,12 +247,12 @@ app.post("/gameSchreiben", function(req,res){
     SET roundsPlayed=${param_round}, 
      round${param_round}='${param_text}',
      activeRound='${param_text}'
-     WHERE gameID ='${param_gameID}'`, function(err){
+     WHERE gameID =${param_gameID}`, function(err){
         if (err){
             res.send(err.message)
         } else {
             //Log der gespeicherten Werte und Weiterleitung auf Option, in weiteres laufendes Game einzusteigen => evtl Auswahl Neu/Laufend?
-            console.log(`uploaded ${param_text} to round ${param_round} and set RP to ${param_newRound}`);
+            console.log(`uploaded ${param_text} to round ${param_round} and set RP to ${param_round}`);
             res.sendFile(__dirname + "/views/game.html");
         }
     });

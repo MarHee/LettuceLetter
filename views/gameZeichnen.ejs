@@ -147,10 +147,11 @@
 <p></p>
 
 <!-- Verlinkung zum Schreiben-->
-<input type="number" name="gameID" value=<%= Game%> hidden> <!--Übergabe der Werte, nicht sichtbar auf Seite-->
-<input type="number" name="round" value=<%= Runde%> hidden>
 
 <form action="/zeichnenFertig" method="POST">
+  <input type="number" name="gameID" value=<%= Game%> hidden> <!--Übergabe der Werte, nicht sichtbar auf Seite-->
+  <input type="number" name="round" value=<%= Runde%> hidden>
+
   <button type="submit" class='primaryContained float-right'>Weiter</button>
 
 </form> 
