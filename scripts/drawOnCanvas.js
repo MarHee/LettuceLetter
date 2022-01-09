@@ -11,7 +11,7 @@ function setAttributes(element, attributes) {
     }
 }
 
-setAttributes(canvas, {id: "canvas", width: "900px", height: "600px;", style: "border:3px #94cf03 dotted;"})
+setAttributes(canvas, {id: "canvas", width: "1000px;", height: "420px;", style: "border: 4px #94cf03 dotted;"})
 
 // get canvas 2D context and set him correct size
 let ctx = canvas.getContext('2d');
@@ -27,7 +27,7 @@ document.addEventListener('mouseenter', setPosition);
 // new position from mouse event
 function setPosition(e) {
   pos.x = e.clientX -10; 
-  pos.y = e.clientY -235 ; 
+  pos.y = e.clientY -200 ; 
 }
 
 function draw(e) {

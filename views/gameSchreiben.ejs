@@ -49,7 +49,10 @@
     	<div class="col-rt-12">
         	<div class="rt-heading">
             	<h1>Lettuce Letter - LETTUCE PLAY!</h1>
-                <p>Draw Something</p>
+                <p>What's this?
+                  Game <%= Game%> <!--Aufruf der Werte des Games-->
+                  Runde <%= Runde%>
+                </p>
             </div>
         </div>
     </div>
@@ -126,11 +129,16 @@
 
 -->
 
-		<a href="/bildzeigen"><button type="button" class='primaryContained float-right'>Gespeichertes Bild anzeigen</button></a>
-
+		<a href="/bildzeigen">
+     
+      <button type="button" class='primaryContained float-right'>Gespeichertes Bild anzeigen</button></a> <!--Bild wird nicht angezeigt-->
+       <!-- <img src="<%=filename%>" alt="Bild">-->
         <form action="/gameSchreiben" method="POST">
             Was wurde hier gezeichnet: <br>
+            
             <input type="text" name="zeichnenAntwort"><br>
+            <input type="number" name="gameID" value=<%= Game%> hidden> <!--Übergabe der Werte, nicht sichtbar auf Seite-->
+            <input type="number" name="round" value=<%= Runde%> hidden>
             <button type="submit">Fertig</button>
 
           </form> 

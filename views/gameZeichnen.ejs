@@ -40,16 +40,8 @@
 			}
 		</script>
 	</head>
-    <!-- Anzeigen was gezeichnet werden soll als Text-->
 
-    <h2>
-        Zeichne bitte:<br>
-        <%= wasZeichnen %> 
-    </h2>
-    <!-- Anzeigen was gezeichnet werden soll als Text ; Ende -->
-
-
-	<body onload="initialize()">
+  <body onload="initialize()">
 		<br>
 
 		<!-- Von Chat body eingefügt-->
@@ -59,8 +51,21 @@
     <div class="rt-container">
     	<div class="col-rt-12">
         	<div class="rt-heading">
+            <div class="vertikal-flex">
             	<h1>Lettuce Letter - LETTUCE PLAY!</h1>
-                <p>Draw Something</p>
+              <br>
+              </div>
+              <div class="vertikal-flex">
+             <!-- Anzeigen was gezeichnet werden soll als Text-->
+              <h2>
+                Game <%= Game%> |
+                Runde <%= Runde%> |
+                Zeichne bitte: <%= wasZeichnen %> 
+            </h2>
+               <!-- Anzeigen was gezeichnet werden soll als Text ; Ende -->
+          </div>
+              </div>
+              
             </div>
         </div>
     </div>
@@ -88,7 +93,7 @@
           <div class="chatbox" id="chatbox">
             <h2>Commentary Box</h2>
           <textarea type="text" class="input" placeholder="Write a comment" v-model="newItem" @keyup.enter="addItem()"></textarea>
-          <button v-on:click="addItem()" class='primaryContained float-right' type="submit">Add Comment</button>
+          <button v-on:click="addItem()" class='primaryContained float-right' type="submit">Senden</button>
           <button type="button" class='primaryContained float-right' class="btn btn-danger btn-lg btn-close" onclick="closeChat()">Close</button>
         </div><!-- End col -->
       </div><!--End Row -->
@@ -131,7 +136,7 @@
 		<br>
 		<script src="drawOnCanvas.js"></script><br>
 		<p></p>
-		<button type="button" id="uploadButton" class='primaryContained float-left'>Bild auf Server speichern (hochladen)</button> <!--setRound Funktion-->
+		<button type="button" id="uploadButton" class='primaryContained float-right'>Bild auf Server speichern (hochladen)</button> <!--setRound Funktion-->
 		
         <!-- Bild anzeigen lassen nicht im Zeinen-Modus erwünscht  
 
@@ -139,8 +144,16 @@
 
 -->
 
-<!-- Verlinkung zum Schreiben-->
-<a href="/schreiben">weiter</a>
+<p></p>
 
+<!-- Verlinkung zum Schreiben-->
+
+<form action="/zeichnenFertig" method="POST">
+  <input type="number" name="gameID" value=<%= Game%> hidden> <!--Übergabe der Werte, nicht sichtbar auf Seite-->
+  <input type="number" name="round" value=<%= Runde%> hidden>
+
+  <button type="submit" class='primaryContained float-right'>Weiter</button>
+
+</form> 
 	</body>
 </html>
