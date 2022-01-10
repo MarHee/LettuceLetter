@@ -80,7 +80,7 @@
           <div class="chatbox" id="chatbox">
             <h2>Commentary Box</h2>
           <textarea type="text" class="input" placeholder="Write a comment" v-model="newItem" @keyup.enter="addItem()"></textarea>
-          <button v-on:click="addItem()" class='primaryContained float-right' type="submit">Add Comment</button>
+          <button v-on:click="addItem()" class='primaryContained float-right' type="submit">Send</button>
           <button type="button" class='primaryContained float-right' class="btn btn-danger btn-lg btn-close" onclick="closeChat()">Close</button>
         </div><!-- End col -->
       </div><!--End Row -->
@@ -133,13 +133,17 @@
      
       <button type="button" class='primaryContained float-right'>Gespeichertes Bild anzeigen</button></a> <!--Bild wird nicht angezeigt-->
        <!-- <img src="<%=filename%>" alt="Bild">-->
+
+       <p></p>
+    
         <form action="/gameSchreiben" method="POST">
             Was wurde hier gezeichnet: <br>
-            
+            <p></p>
             <input type="text" name="zeichnenAntwort"><br>
             <input type="number" name="gameID" value=<%= Game%> hidden> <!--Übergabe der Werte, nicht sichtbar auf Seite-->
             <input type="number" name="round" value=<%= Runde%> hidden>
-            <button type="submit">Fertig</button>
+            <br>
+            <button type="submit" class='primaryContained'>Fertig</button>
 
           </form> 
 
