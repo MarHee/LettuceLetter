@@ -180,9 +180,11 @@ app.post("/showRound", function(req,res){
                     res.render("gameZeichnen", {"Game": gameID, "Runde": round, "wasZeichnen": activeRound});
                 }  
             } else {
-                res.send("Dieses Game ist bereits beendet");
-            }
-                    
+                db.all(`SELECT * FROM games WHERE gameID = ${param_gameID}`, function(err,rows)
+                {
+                    res.render("finishedGame", {"Game": gameID, "GameRow" : rows[0]})
+                });
+            }      
         } else {
             res.send("Fehler: Kein Game mit dieser ID gefunden.");
             //eventuell Weiterleitung auf newGame?
@@ -229,11 +231,15 @@ app.post("/zeichnenFertig", function(req,res){
         } else {
             //Log der gespeicherten Werte und Weiterleitung auf Option, in weiteres laufendes Game einzusteigen => evtl Auswahl Neu/Laufend?
             console.log(`uploaded ${param_img} to round ${param_round} and set RP to ${param_round}`);
-            res.sendFile(__dirname + "/views/game.html");
+            res.render("finishedRound", {"Game": param_gameID, "Round": param_round, "Upload": "ein Bild"});
         }
     });
-    if (param_round >= 7){
-            db.run(`UPDATE games SET active = 0 WHERE gameID = ${param_gameID}`);
+    if (param_round > 7){
+        db.run(`UPDATE games SET active = 0 WHERE gameID = ${param_gameID}`);
+        db.all(`SELECT * FROM games WHERE gameID = ${param_gameID}`, function(err,rows)
+        {
+            res.render("finishedGame", {"Game": gameID, "GameRow" : rows[0]})
+        });
         }
 }); 
 
@@ -255,13 +261,34 @@ app.post("/gameSchreiben", function(req,res){
         } else {
             //Log der gespeicherten Werte und Weiterleitung auf Option, in weiteres laufendes Game einzusteigen => evtl Auswahl Neu/Laufend?
             console.log(`uploaded ${param_text} to round ${param_round} and set RP to ${param_round}`);
-            res.sendFile(__dirname + "/views/game.html");
+            res.render("finishedRound", {"Game": param_gameID, "Round": param_round, "Upload": "\"" + param_text + "\""});
         }
     });
-    if (param_round >= 7){
+    if (param_round > 7){
         db.run(`UPDATE games SET active = 0 WHERE gameID = ${param_gameID}`);
+        db.all(`SELECT * FROM games WHERE gameID = ${param_gameID}`, function(err,rows)
+        {
+            res.render("finishedGame", {"Game": gameID, "GameRow" : rows[0]})
+        });
+
     }
 });   
+
+app.get("/finishedGameTable", function(req,res){
+    const param_gameID = req.body.gameID;
+    db.all(`SELECT * FROM games WHERE gameID = ${param_gameID}`,
+    function(err, row){
+        if(err){
+            res.send(err.message)
+        } else {
+            const gamerow = row[0];
+            console.log(gamerow.gameID);
+            res.render("finishedGame", {"GameRow": gamerow});
+        }
+        
+    })
+
+});
 
 
 app.get("/spielen",function(req,res){
