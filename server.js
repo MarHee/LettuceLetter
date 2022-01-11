@@ -154,10 +154,13 @@ app.post("/showRound", function(req,res){
                     res.render("gameZeichnen", {"Game": gameID, "Runde": round, "wasZeichnen": activeRound});
                 }  
             } else {
+                res.send("Dieses Game ist leider schon beendet");
+                /*
                 db.all(`SELECT * FROM games WHERE gameID = ${param_gameID}`, function(err,rows)
                 {
                     res.render("finishedGame", {"Game": gameID, "GameRow" : rows[0], "Dir": __dirname})
                 });
+                */
             }      
         } else {
             res.send("Fehler: Kein Game mit dieser ID gefunden.");
@@ -178,7 +181,10 @@ app.post("/Runde1", function(req,res){
             res.send(err.message)
         } else {
             //nach hochladen des neuen Games Weiterleitung auf Option, Laufende Games weiterzuspielen
-            res.sendFile(__dirname + "/views/game.html");
+            //res.sendFile(__dirname + "/views/game.html");
+            //Nach Hochladen Feedback, was hochgeladen wurde
+            res.render("finishedRound", {"Game": param_gameID, "Round": param_round, "Upload": "\"" + param_text + "\""});
+
         }
     });
 });
@@ -209,10 +215,12 @@ app.post("/zeichnenFertig", function(req,res){
     });
     if (param_round >= 7){
         db.run(`UPDATE games SET active = 0, activeRound = NULL WHERE gameID = ${param_gameID}`);
-        db.all(`SELECT * FROM games WHERE gameID = ${param_gameID}`, function(err,rows)
+        
+        /*db.all(`SELECT * FROM games WHERE gameID = ${param_gameID}`, function(err,rows)
         {
             res.render("finishedGame", {"Game": gameID, "GameRow" : rows[0]})
         });
+        */
         }
 }); 
 
@@ -239,11 +247,12 @@ app.post("/gameSchreiben", function(req,res){
     });
     if (param_round >= 7){
         db.run(`UPDATE games SET active = 0, activeRound = NULL WHERE gameID = ${param_gameID}`);
-        db.all(`SELECT * FROM games WHERE gameID = ${param_gameID}`, function(err,rows)
+        res.send("Dieses Game ist leider schon beendet");
+        /*db.all(`SELECT * FROM games WHERE gameID = ${param_gameID}`, function(err,rows)
         {
             res.render("finishedGame", {"Game": gameID, "GameRow" : rows[0]})
         });
-
+        */
     }
 });   
 
