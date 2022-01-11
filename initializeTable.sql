@@ -59,9 +59,8 @@ INSERT INTO users (name, password, player) VALUES ("David", "divaD", 1);
 INSERT INTO users (name, password, player) VALUES ("Maria17", "123qwerty", 1);
 INSERT INTO users (name, password, player) VALUES ("SpeckiSpectator", "lurking1sFun", 0);
 
-INSERT INTO games (roundsPlayed, active) VALUES (0, 1);
-INSERT INTO games (roundsPlayed, active, round1, round2) VALUES (2, 1, "Schwein", "images/gameIDrunde2");
-INSERT INTO games (roundsPlayed, active, round1, round2, round3, round4, round5, round6, round7) VALUES (7, 0, "Haus", "images/gameIDrunde2", "Haus", "images/gameIDrunde4", "Haus", "images/gameIDrunde6", "Hund");
+INSERT INTO games (roundsPlayed, active, round1, round2, round3, round4, activeRound) VALUES (4, 1, "Schloss", "Game21641203320199.png", "fliegendes Schloss", "Game21641204783087.png", "Game21641204783087.png");
+INSERT INTO games (roundsPlayed, active, round1, round2, round3, round4, round5, round6, round7) VALUES (7, 0, "Frosch", "Game21641665237705.png", "Frosch", "Game21641753617164.png", "Frosch?", "Game21641690707626.png", "Frosch, I guess?");
 
 INSERT INTO chat (sentBy, msgText) VALUES (3, "Hi guys!");
 INSERT INTO chat (sentBy, msgText) VALUES (1, "Hallo zusammen");
