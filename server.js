@@ -97,11 +97,6 @@ app.get('/test', function(req, res){
     res.sendFile(__dirname + '/views/test.html');
 });
 
-//TODO wird diese Funktion irgendwo aufgerufen? Ist ja ein Serveraufruf localhost:3000/gameBeginn . Wird nicht 
-app.get('/gameBeginn',function(req,res){
-    res.sendFile(__dirname + '/views/gameFirst.html');
-});
-
 app.get('/game', function(req, res){
     res.sendFile(__dirname + '/views/game.html');
 });
@@ -116,18 +111,11 @@ app.get("/chat", function(req, res){
 
 });
 
-let wasZeichnen = " fliegende Kuh mit Krone"; // in diesen String setze was gezeichnet werden soll
+let wasZeichnen = " fliegende Kuh mit Krone"; // in diesen String setzen was gezeichnet werden soll
 
 app.get('/gameZeichnen',function(req,res){
     res.render("gameZeichnen",{"wasZeichnen": wasZeichnen});
 })
-
-
-//auskommentiert weil redundant
-/*//Play-Button von Start
-app.post("/play", function(req,res){    
-    res.redirect("/login");
-});*/
 
 //Spielen-Button von Login
 app.post("/playAngemeldet", function(req,res){    
@@ -166,13 +154,10 @@ app.post("/showRound", function(req,res){
                     res.render("gameZeichnen", {"Game": gameID, "Runde": round, "wasZeichnen": activeRound});
                 }  
             } else {
-                res.send("Dieses Game ist leider schon beendet")
-                /*
                 db.all(`SELECT * FROM games WHERE gameID = ${param_gameID}`, function(err,rows)
                 {
                     res.render("finishedGame", {"Game": gameID, "GameRow" : rows[0], "Dir": __dirname})
                 });
-                */
             }      
         } else {
             res.send("Fehler: Kein Game mit dieser ID gefunden.");
@@ -192,7 +177,7 @@ app.post("/Runde1", function(req,res){
         if (err){
             res.send(err.message)
         } else {
-            //nach hochladen des neuen Games Weiterleitung auf Option, Laufende Games weiterzuspielen ==> eventuell eher auf LoginErfolgreich?
+            //nach hochladen des neuen Games Weiterleitung auf Option, Laufende Games weiterzuspielen
             res.sendFile(__dirname + "/views/game.html");
         }
     });
@@ -223,13 +208,11 @@ app.post("/zeichnenFertig", function(req,res){
         }
     });
     if (param_round >= 7){
-        res.send("Dieses Game ist leider schon beendet")
-        /*
         db.run(`UPDATE games SET active = 0, activeRound = NULL WHERE gameID = ${param_gameID}`);
         db.all(`SELECT * FROM games WHERE gameID = ${param_gameID}`, function(err,rows)
         {
             res.render("finishedGame", {"Game": gameID, "GameRow" : rows[0]})
-        });*/
+        });
         }
 }); 
 
@@ -255,34 +238,14 @@ app.post("/gameSchreiben", function(req,res){
         }
     });
     if (param_round >= 7){
-        res.send("Dieses Game ist leider schon beendet");
-        /*
         db.run(`UPDATE games SET active = 0, activeRound = NULL WHERE gameID = ${param_gameID}`);
         db.all(`SELECT * FROM games WHERE gameID = ${param_gameID}`, function(err,rows)
         {
             res.render("finishedGame", {"Game": gameID, "GameRow" : rows[0]})
         });
-        */
+
     }
 });   
-
-/*
-app.get("/finishedGameTable", function(req,res){
-    const param_gameID = req.body.gameID;
-    db.all(`SELECT * FROM games WHERE gameID = ${param_gameID}`,
-    function(err, row){
-        if(err){
-            res.send(err.message)
-        } else {
-            const gamerow = row[0];
-            console.log(gamerow.gameID);
-            res.render("finishedGame", {"GameRow": gamerow});
-        }
-        
-    })
-
-});
-*/
 
 app.get("/spielen",function(req,res){
    res.sendFile(__dirname + "/views/upload_formular.html");
