@@ -182,7 +182,7 @@ app.post("/showRound", function(req,res){
             } else {
                 db.all(`SELECT * FROM games WHERE gameID = ${param_gameID}`, function(err,rows)
                 {
-                    res.render("finishedGame", {"Game": gameID, "GameRow" : rows[0]})
+                    res.render("finishedGame", {"Game": gameID, "GameRow" : rows[0], "Dir": __dirname})
                 });
             }      
         } else {
@@ -234,8 +234,8 @@ app.post("/zeichnenFertig", function(req,res){
             res.render("finishedRound", {"Game": param_gameID, "Round": param_round, "Upload": "ein Bild"});
         }
     });
-    if (param_round > 7){
-        db.run(`UPDATE games SET active = 0 WHERE gameID = ${param_gameID}`);
+    if (param_round >= 7){
+        db.run(`UPDATE games SET active = 0, activeRound = NULL WHERE gameID = ${param_gameID}`);
         db.all(`SELECT * FROM games WHERE gameID = ${param_gameID}`, function(err,rows)
         {
             res.render("finishedGame", {"Game": gameID, "GameRow" : rows[0]})
@@ -264,8 +264,8 @@ app.post("/gameSchreiben", function(req,res){
             res.render("finishedRound", {"Game": param_gameID, "Round": param_round, "Upload": "\"" + param_text + "\""});
         }
     });
-    if (param_round > 7){
-        db.run(`UPDATE games SET active = 0 WHERE gameID = ${param_gameID}`);
+    if (param_round >= 7){
+        db.run(`UPDATE games SET active = 0, activeRound = NULL WHERE gameID = ${param_gameID}`);
         db.all(`SELECT * FROM games WHERE gameID = ${param_gameID}`, function(err,rows)
         {
             res.render("finishedGame", {"Game": gameID, "GameRow" : rows[0]})
