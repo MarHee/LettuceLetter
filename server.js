@@ -137,20 +137,6 @@ app.post("/playLaufend", function(req,res){
     res.sendFile(__dirname + "/views/game.html")
 });
 
-/*
-// POST von gameSchreiben
-app.post("/gameSchreiben", function(req,res){
-    const antwortGezeichnet= req.body.zeichnenAntwort; //hier wird die Antwort des Users drin gespeichert
-
-    res.render("gameZeichnen",{"wasZeichnen": antwortGezeichnet});
-    
-    //console.log(antwortGezeichnet);
-
-
-});*/
-//auskommentiert weil nicht mit Datenbank verbunden und führt direkt zu nächster Runde desselben Games
-
-
 //Anzeige der aktiven Runde und Inhalt aktiver Runde
 app.post("/showRound", function(req,res){
     //Eingabe GameID
@@ -180,10 +166,13 @@ app.post("/showRound", function(req,res){
                     res.render("gameZeichnen", {"Game": gameID, "Runde": round, "wasZeichnen": activeRound});
                 }  
             } else {
+                res.send("Dieses Game ist leider schon beendet")
+                /*
                 db.all(`SELECT * FROM games WHERE gameID = ${param_gameID}`, function(err,rows)
                 {
                     res.render("finishedGame", {"Game": gameID, "GameRow" : rows[0], "Dir": __dirname})
                 });
+                */
             }      
         } else {
             res.send("Fehler: Kein Game mit dieser ID gefunden.");
@@ -214,11 +203,10 @@ app.post("/zeichnenFertig", function(req,res){
     //Input aus Zeichnen-Runde in Variablen
     const param_gameID = req.body.gameID;
     const param_round = req.body.round;
-    const param_img =  testFilename; //TODO richtiger Aufruf des Inhalts der Canvas???
+    const param_img =  testFilename; 
     console.log("Upload - ID: "+param_gameID + ", Runde: " + param_round);
     console.log(testFilename); // nur zum testen
-    console.log(param_img); // ist genau das was testFilename ist und mit testFilename wird in Zeile 76 bildzeigen aufgerufen was geht
-    // unter local.../spielen kann man sehen das der bildanzeigen button geht.
+    console.log(param_img); 
 
     //Einfügen der Werte in Datenbank-Zeile mit übergebener GameID
     db.run( `UPDATE games  
@@ -235,11 +223,13 @@ app.post("/zeichnenFertig", function(req,res){
         }
     });
     if (param_round >= 7){
+        res.send("Dieses Game ist leider schon beendet")
+        /*
         db.run(`UPDATE games SET active = 0, activeRound = NULL WHERE gameID = ${param_gameID}`);
         db.all(`SELECT * FROM games WHERE gameID = ${param_gameID}`, function(err,rows)
         {
             res.render("finishedGame", {"Game": gameID, "GameRow" : rows[0]})
-        });
+        });*/
         }
 }); 
 
@@ -265,15 +255,18 @@ app.post("/gameSchreiben", function(req,res){
         }
     });
     if (param_round >= 7){
+        res.send("Dieses Game ist leider schon beendet");
+        /*
         db.run(`UPDATE games SET active = 0, activeRound = NULL WHERE gameID = ${param_gameID}`);
         db.all(`SELECT * FROM games WHERE gameID = ${param_gameID}`, function(err,rows)
         {
             res.render("finishedGame", {"Game": gameID, "GameRow" : rows[0]})
         });
-
+        */
     }
 });   
 
+/*
 app.get("/finishedGameTable", function(req,res){
     const param_gameID = req.body.gameID;
     db.all(`SELECT * FROM games WHERE gameID = ${param_gameID}`,
@@ -289,7 +282,7 @@ app.get("/finishedGameTable", function(req,res){
     })
 
 });
-
+*/
 
 app.get("/spielen",function(req,res){
    res.sendFile(__dirname + "/views/upload_formular.html");
