@@ -97,11 +97,6 @@ app.get('/test', function(req, res){
     res.sendFile(__dirname + '/views/test.html');
 });
 
-//TODO wird diese Funktion irgendwo aufgerufen? Ist ja ein Serveraufruf localhost:3000/gameBeginn . Wird nicht 
-app.get('/gameBeginn',function(req,res){
-    res.sendFile(__dirname + '/views/gameFirst.html');
-});
-
 app.get('/game', function(req, res){
     res.sendFile(__dirname + '/views/game.html');
 });
@@ -116,18 +111,11 @@ app.get("/chat", function(req, res){
 
 });
 
-let wasZeichnen = " fliegende Kuh mit Krone"; // in diesen String setze was gezeichnet werden soll
+let wasZeichnen = " fliegende Kuh mit Krone"; // in diesen String setzen was gezeichnet werden soll
 
 app.get('/gameZeichnen',function(req,res){
     res.render("gameZeichnen",{"wasZeichnen": wasZeichnen});
 })
-
-
-//auskommentiert weil redundant
-/*//Play-Button von Start
-app.post("/play", function(req,res){    
-    res.redirect("/login");
-});*/
 
 //Spielen-Button von Login
 app.post("/playAngemeldet", function(req,res){    
@@ -136,20 +124,6 @@ app.post("/playAngemeldet", function(req,res){
 app.post("/playLaufend", function(req,res){
     res.sendFile(__dirname + "/views/game.html")
 });
-
-/*
-// POST von gameSchreiben
-app.post("/gameSchreiben", function(req,res){
-    const antwortGezeichnet= req.body.zeichnenAntwort; //hier wird die Antwort des Users drin gespeichert
-
-    res.render("gameZeichnen",{"wasZeichnen": antwortGezeichnet});
-    
-    //console.log(antwortGezeichnet);
-
-
-});*/
-//auskommentiert weil nicht mit Datenbank verbunden und führt direkt zu nächster Runde desselben Games
-
 
 //Anzeige der aktiven Runde und Inhalt aktiver Runde
 app.post("/showRound", function(req,res){
@@ -180,9 +154,11 @@ app.post("/showRound", function(req,res){
                     res.render("gameZeichnen", {"Game": gameID, "Runde": round, "wasZeichnen": activeRound});
                 }  
             } else {
-                res.send("Dieses Game ist bereits beendet");
-            }
-                    
+                db.all(`SELECT * FROM games WHERE gameID = ${param_gameID}`, function(err,rows)
+                {
+                    res.render("finishedGame", {"Game": gameID, "GameRow" : rows[0], "Dir": __dirname})
+                });
+            }      
         } else {
             res.send("Fehler: Kein Game mit dieser ID gefunden.");
             //eventuell Weiterleitung auf newGame?
@@ -201,7 +177,7 @@ app.post("/Runde1", function(req,res){
         if (err){
             res.send(err.message)
         } else {
-            //nach hochladen des neuen Games Weiterleitung auf Option, Laufende Games weiterzuspielen ==> eventuell eher auf LoginErfolgreich?
+            //nach hochladen des neuen Games Weiterleitung auf Option, Laufende Games weiterzuspielen
             res.sendFile(__dirname + "/views/game.html");
         }
     });
@@ -212,11 +188,10 @@ app.post("/zeichnenFertig", function(req,res){
     //Input aus Zeichnen-Runde in Variablen
     const param_gameID = req.body.gameID;
     const param_round = req.body.round;
-    const param_img =  testFilename; //TODO richtiger Aufruf des Inhalts der Canvas???
+    const param_img =  testFilename; 
     console.log("Upload - ID: "+param_gameID + ", Runde: " + param_round);
     console.log(testFilename); // nur zum testen
-    console.log(param_img); // ist genau das was testFilename ist und mit testFilename wird in Zeile 76 bildzeigen aufgerufen was geht
-    // unter local.../spielen kann man sehen das der bildanzeigen button geht.
+    console.log(param_img); 
 
     //Einfügen der Werte in Datenbank-Zeile mit übergebener GameID
     db.run( `UPDATE games  
@@ -229,11 +204,15 @@ app.post("/zeichnenFertig", function(req,res){
         } else {
             //Log der gespeicherten Werte und Weiterleitung auf Option, in weiteres laufendes Game einzusteigen => evtl Auswahl Neu/Laufend?
             console.log(`uploaded ${param_img} to round ${param_round} and set RP to ${param_round}`);
-            res.sendFile(__dirname + "/views/game.html");
+            res.render("finishedRound", {"Game": param_gameID, "Round": param_round, "Upload": "ein Bild"});
         }
     });
     if (param_round >= 7){
-            db.run(`UPDATE games SET active = 0 WHERE gameID = ${param_gameID}`);
+        db.run(`UPDATE games SET active = 0, activeRound = NULL WHERE gameID = ${param_gameID}`);
+        db.all(`SELECT * FROM games WHERE gameID = ${param_gameID}`, function(err,rows)
+        {
+            res.render("finishedGame", {"Game": gameID, "GameRow" : rows[0]})
+        });
         }
 }); 
 
@@ -255,14 +234,18 @@ app.post("/gameSchreiben", function(req,res){
         } else {
             //Log der gespeicherten Werte und Weiterleitung auf Option, in weiteres laufendes Game einzusteigen => evtl Auswahl Neu/Laufend?
             console.log(`uploaded ${param_text} to round ${param_round} and set RP to ${param_round}`);
-            res.sendFile(__dirname + "/views/game.html");
+            res.render("finishedRound", {"Game": param_gameID, "Round": param_round, "Upload": "\"" + param_text + "\""});
         }
     });
     if (param_round >= 7){
-        db.run(`UPDATE games SET active = 0 WHERE gameID = ${param_gameID}`);
+        db.run(`UPDATE games SET active = 0, activeRound = NULL WHERE gameID = ${param_gameID}`);
+        db.all(`SELECT * FROM games WHERE gameID = ${param_gameID}`, function(err,rows)
+        {
+            res.render("finishedGame", {"Game": gameID, "GameRow" : rows[0]})
+        });
+
     }
 });   
-
 
 app.get("/spielen",function(req,res){
    res.sendFile(__dirname + "/views/upload_formular.html");
