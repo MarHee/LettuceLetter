@@ -178,7 +178,19 @@ app.post("/Runde1", function(req,res){
             res.send(err.message)
         } else {
             //nach hochladen des neuen Games Weiterleitung auf Option, Laufende Games weiterzuspielen
-            res.sendFile(__dirname + "/views/game.html");
+            db.all(`SELECT * FROM games ORDER BY gameID DESC`, function (err,rows){
+                if (err){
+                    res.send(err.message)
+                } else {
+                //console.log(rows);
+                var param_gameID = rows[0].gameID;
+
+                res.render("finishedRound", {"Game": param_gameID, "Round": 1, "Upload": "\"" + Zeichnen + "\""});
+                }
+                
+            });
+            
+
         }
     });
 });
