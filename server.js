@@ -42,18 +42,9 @@ app.listen(3000, function(){
 const fs = require('fs');
 const req = require('express/lib/request');
 
-//TODO brauchen wir die noch? Eigentlich Nein, nur um zu testen ob das zeichnen an sich noch geht
-
-// Hier kann man zeichnen und Bilder hochladen in images
-// app.get("/upload", function(req, res){
- //   res.sendFile(__dirname + "/views/upload_formular_canvas.html");
-// }); 
-
-let galerie = "Game21641204783087.png"
-
 let testFilename = "Game21641204783087.png";
 
-let activeGameID = "Game" + 2; //Brauchen wir die noch?
+let activeGameID = "Game" + 2; 
 
 // Auswertung des Upload-Formulars
 app.post('/onupload', function(req, res) {
@@ -77,7 +68,7 @@ app.post('/onupload', function(req, res) {
     // console.log(testFilename);
     res.render("bildzeigen", {"filename": testFilename});
     console.log("Ich zeige Bild: "+ testFilename );
-  }); //TODO zeigt leider Bild nicht, referiert auf testFilename, was aber auch nicht angezeigt wird, wenn es eins der Bilder in images ist
+  }); 
     
 
 
@@ -182,7 +173,6 @@ app.post("/Runde1", function(req,res){
                 if (err){
                     res.send(err.message)
                 } else {
-                //console.log(rows);
                 var param_gameID = rows[0].gameID;
 
                 res.render("finishedRound", {"Game": param_gameID, "Round": 1, "Upload": "\"" + Zeichnen + "\""});
