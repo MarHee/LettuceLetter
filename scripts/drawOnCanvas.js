@@ -1,5 +1,7 @@
-
+// Original Script by Matěj Pokorný https://stackoverflow.com/a/30684711 (26.11.2021 16:21 Uhr)
+// --------------------------------------------------------------------------------------------
 // create canvas element and append it to document body
+
 let canvas = document.createElement('canvas');
 document.body.appendChild(canvas);
 
